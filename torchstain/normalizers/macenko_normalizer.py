@@ -1,5 +1,5 @@
-from torchstain.normalizers.numpy_macenko_normalizer import NumpyMacenkoNormalizer
-from torchstain.normalizers.torch_macenko_normalizer import TorchMacenkoNormalizer
+from .numpy_macenko_normalizer import NumpyMacenkoNormalizer
+from .torch_macenko_normalizer import TorchMacenkoNormalizer
 
 def MacenkoNormalizer(backend='torch'):
     if backend not in ['torch', 'numpy']:
