@@ -8,7 +8,7 @@ setup(
     author='Carlo Alberto Barbano',
     author_email='carlo.alberto.barbano@outlook.com',
     license='MIT',
-    packages=['torchstain'],
+    packages=find_packages(exclude=('tests')),
     zip_safe=False,
     install_requires=[
         'torch',
