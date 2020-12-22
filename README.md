@@ -8,7 +8,7 @@ Normalization algorithms currently implemented:
 ## Installation
 
 ```bash
-pip3 install git+git://github.com:EIDOSlab/torchstain
+pip3 install git+git://github.com/EIDOSlab/torchstain
 ```
 
 ## Example Usage
@@ -32,7 +32,7 @@ torch_normalizer = torchstain.MacenkoNormalizer(backend='torch')
 torch_normalizer.fit(T(target))
 
 t_to_transform = T(to_transform)
-norm, H, E = normalizer.normalize(I=to_transform, stains=True)
+norm, H, E = normalizer.normalize(I=t_to_transform, stains=True)
 ```
 
 ![alt text](result.png)
