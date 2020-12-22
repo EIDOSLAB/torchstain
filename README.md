@@ -35,6 +35,9 @@ t_to_transform = T(to_transform)
 norm, H, E = normalizer.normalize(I=to_transform, stains=True)
 ```
 
+![alt text](result.png)
+
+
 ## Backend comparison
 
 Results with 10 runs per size on a Intel(R) Core(TM) i5-8365U CPU @ 1.60GHz
