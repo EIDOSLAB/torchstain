@@ -8,7 +8,7 @@ Normalization algorithms currently implemented:
 ## Installation
 
 ```bash
-pip3 install git+git://github.com/EIDOSlab/torchstain
+pip3 install torchstain
 ```
 
 ## Example Usage
