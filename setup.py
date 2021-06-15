@@ -12,7 +12,7 @@ setup(
     long_description_content_type='text/markdown',
     url='https://github.com/EIDOSlab/torchstain',
     author='EIDOSlab',
-    author_email='carlo.alberto.barbano@outlook.com',
+    author_email='eidoslab@di.unito.it',
     license='MIT',
     packages=find_packages(exclude=('tests')),
     zip_safe=False,
