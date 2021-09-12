@@ -107,18 +107,18 @@ class TorchMacenkoNormalizer(HENormalizer):
 
         # recreate the image using reference mixing matrix
         Inorm = Io * torch.exp(-torch.matmul(self.HERef, C))
-        Inorm[Inorm > 255] = 254
+        Inorm[Inorm > 255] = 255
         Inorm = Inorm.T.reshape(h, w, c).int()
 
         H, E = None, None
 
         if stains:
             H = torch.mul(Io, torch.exp(torch.matmul(-self.HERef[:, 0].unsqueeze(-1), C[0, :].unsqueeze(0))))
-            H[H > 255] = 254
+            H[H > 255] = 255
             H = H.T.reshape(h, w, c).int()
 
             E = torch.mul(Io, torch.exp(torch.matmul(-self.HERef[:, 1].unsqueeze(-1), C[1, :].unsqueeze(0))))
-            E[E > 255] = 254
+            E[E > 255] = 255
             E = E.T.reshape(h, w, c).int()
 
         return Inorm, H, E

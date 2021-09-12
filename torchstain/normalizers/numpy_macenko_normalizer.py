@@ -106,7 +106,7 @@ class NumpyMacenkoNormalizer(HENormalizer):
 
         # recreate the image using reference mixing matrix
         Inorm = np.multiply(Io, np.exp(-self.HERef.dot(C2)))
-        Inorm[Inorm > 255] = 254
+        Inorm[Inorm > 255] = 255
         Inorm = np.reshape(Inorm.T, (h, w, c)).astype(np.uint8)
 
 
@@ -115,11 +115,11 @@ class NumpyMacenkoNormalizer(HENormalizer):
         if stains:
             # unmix hematoxylin and eosin
             H = np.multiply(Io, np.exp(np.expand_dims(-self.HERef[:,0], axis=1).dot(np.expand_dims(C2[0,:], axis=0))))
-            H[H>255] = 254
+            H[H > 255] = 255
             H = np.reshape(H.T, (h, w, c)).astype(np.uint8)
 
             E = np.multiply(Io, np.exp(np.expand_dims(-self.HERef[:,1], axis=1).dot(np.expand_dims(C2[1,:], axis=0))))
-            E[E>255] = 254
+            E[E > 255] = 255
             E = np.reshape(E.T, (h, w, c)).astype(np.uint8)
 
         return Inorm, H, E
