@@ -33,19 +33,15 @@ class TorchMacenkoNormalizer(HENormalizer):
         That = torch.matmul(ODhat, eigvecs)
         phi = torch.atan2(That[:, 1], That[:, 0])
 
-        minPhi = torch.tensor(percentile(phi, alpha))
-        maxPhi = torch.tensor(percentile(phi, 100 - alpha))
+        minPhi = percentile(phi, alpha)
+        maxPhi = percentile(phi, 100 - alpha)
 
         vMin = torch.matmul(eigvecs, torch.stack((torch.cos(minPhi), torch.sin(minPhi))).T).unsqueeze(1)
         vMax = torch.matmul(eigvecs, torch.stack((torch.cos(maxPhi), torch.sin(maxPhi))).T).unsqueeze(1)
 
         # a heuristic to make the vector corresponding to hematoxylin first and the
         # one corresponding to eosin second
-        if vMin[0] > vMax[0]:
-            HE = torch.cat((vMin, vMax), dim=1)
-
-        else:
-            HE = torch.cat((vMax, vMin), dim=1)
+        HE = torch.where(vMin[0] > vMax[0], torch.cat((vMin, vMax), dim=1), torch.cat((vMax, vMin), dim=1))
 
         return HE
 
@@ -66,7 +62,7 @@ class TorchMacenkoNormalizer(HENormalizer):
         HE = self.__find_HE(ODhat, eigvecs, alpha)
 
         C = self.__find_concentration(OD, HE)
-        maxC = torch.tensor([percentile(C[0, :], 99), percentile(C[1, :], 99)])
+        maxC = torch.stack([percentile(C[0, :], 99), percentile(C[1, :], 99)])
 
         return HE, C, maxC
 

@@ -21,5 +21,5 @@ def percentile(t: torch.tensor, q: float) -> Union[int, float]:
     # indeed corresponds to k=1, not k=0! Use float(q) instead of q directly,
     # so that ``round()`` returns an integer, even if q is a np.float32.
     k = 1 + round(.01 * float(q) * (t.numel() - 1))
-    result = t.view(-1).kthvalue(k).values.item()
+    result = t.view(-1).kthvalue(k).values
     return result
