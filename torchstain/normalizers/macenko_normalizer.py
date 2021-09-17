@@ -1,10 +1,13 @@
 from .numpy_macenko_normalizer import NumpyMacenkoNormalizer
 from .torch_macenko_normalizer import TorchMacenkoNormalizer
+from .tensorflow_macenko_normalizer import TensorFlowMacenkoNormalizer
 
 def MacenkoNormalizer(backend='torch'):
-    if backend not in ['torch', 'numpy']:
-        raise Exception(f'Unkown backend {backend}')
-
     if backend == 'numpy':
         return NumpyMacenkoNormalizer()
-    return TorchMacenkoNormalizer()
+    elif backend == "tensorflow":
+    	return TensorFlowMacenkoNormalizer()
+    elif backend == "torch":
+    	return TorchMacenkoNormalizer()
+    else:
+    	raise Exception(f'Unknown backend {backend}')
