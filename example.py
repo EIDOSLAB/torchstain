@@ -26,11 +26,9 @@ tf_normalizer.fit(T(target))
 
 t_to_transform = T(to_transform)
 
-# exit()
-
 t_ = time.time()
 norm, H, E = normalizer.normalize(I=to_transform, stains=True)
-print("numpy: ", time.time() - t_)
+print("numpy runtime:", time.time() - t_)
 
 #'''
 plt.figure()
@@ -59,7 +57,7 @@ plt.show()
 
 t_ = time.time()
 norm, H, E = torch_normalizer.normalize(I=t_to_transform, stains=True)
-print("torch: ", time.time() - t_)
+print("torch runtime:", time.time() - t_)
 
 #'''
 plt.figure()
@@ -88,7 +86,7 @@ plt.show()
 
 t_ = time.time()
 norm, H, E = tf_normalizer.normalize(I=t_to_transform, stains=True)
-print("tf: ", time.time() - t_)
+print("tf runtime:", time.time() - t_)
 
 #'''
 plt.figure()
