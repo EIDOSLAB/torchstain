@@ -22,7 +22,6 @@ class TensorFlowMacenkoNormalizer:
         I = tf.transpose(I, [1, 2, 0])
 
         # calculate optical density
-        #OD = -tf.math.log((tf.cast(tf.reshape(I, [tf.math.reduce_prod(I.shape[:-1]), I.shape[-1]]), tf.float32) + 1) / Io)
         OD = -tf.math.log((tf.cast(tf.reshape(I, [tf.math.reduce_prod(I.shape[:-1]), I.shape[-1]]), tf.float32) + 1) / Io)
 
         # remove transparent pixels
@@ -113,12 +112,10 @@ class TensorFlowMacenkoNormalizer:
 
         if stains:
             H = tf.math.multiply(Io, tf.math.exp(tf.linalg.matmul(-tf.expand_dims(self.HERef[:, 0], axis=-1), tf.expand_dims(C[0, :], axis=0))))
-            #H[H > 255] = 255
             H = tf.clip_by_value(H, 0, 255)
             H = tf.cast(tf.reshape(tf.transpose(H), shape=(h, w, c)), tf.int32)
 
             E = tf.math.multiply(Io, tf.math.exp(tf.linalg.matmul(-tf.expand_dims(self.HERef[:, 1], axis=-1), tf.expand_dims(C[1, :], axis=0))))
-            #E[E > 255] = 255
             E = tf.clip_by_value(E, 0, 255)
             E = tf.cast(tf.reshape(tf.transpose(E), shape=(h, w, c)), tf.int32)
 

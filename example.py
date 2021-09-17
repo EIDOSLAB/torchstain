@@ -30,7 +30,6 @@ t_ = time.time()
 norm, H, E = normalizer.normalize(I=to_transform, stains=True)
 print("numpy runtime:", time.time() - t_)
 
-#'''
 plt.figure()
 plt.suptitle('numpy normalizer')
 plt.subplot(2, 2, 1)
@@ -53,13 +52,11 @@ plt.title('E')
 plt.axis('off')
 plt.imshow(E)
 plt.show()
-#'''
 
 t_ = time.time()
 norm, H, E = torch_normalizer.normalize(I=t_to_transform, stains=True)
 print("torch runtime:", time.time() - t_)
 
-#'''
 plt.figure()
 plt.suptitle('torch normalizer')
 plt.subplot(2, 2, 1)
@@ -82,13 +79,11 @@ plt.title('E')
 plt.axis('off')
 plt.imshow(E)
 plt.show()
-#'''
 
 t_ = time.time()
 norm, H, E = tf_normalizer.normalize(I=t_to_transform, stains=True)
 print("tf runtime:", time.time() - t_)
 
-#'''
 plt.figure()
 plt.suptitle('tensorflow normalizer')
 plt.subplot(2, 2, 1)
@@ -111,4 +106,3 @@ plt.title('E')
 plt.axis('off')
 plt.imshow(E)
 plt.show()
-#'''
