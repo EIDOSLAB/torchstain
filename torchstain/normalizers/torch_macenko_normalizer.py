@@ -7,7 +7,7 @@ from torchstain.utils import cov, percentile
 Source code ported from: https://github.com/schaugf/HEnorm_python
 Original implementation: https://github.com/mitkovetta/staining-normalization
 """
-class TorchMacenkoNormalizer:
+class TorchMacenkoNormalizer(HENormalizer):
     def __init__(self):
         super().__init__()
 

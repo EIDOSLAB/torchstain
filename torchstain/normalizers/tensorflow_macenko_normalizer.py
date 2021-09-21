@@ -9,7 +9,7 @@ import tensorflow.keras.backend as K
 Source code ported from: https://github.com/schaugf/HEnorm_python
 Original implementation: https://github.com/mitkovetta/staining-normalization
 """
-class TensorFlowMacenkoNormalizer:
+class TensorFlowMacenkoNormalizer(HENormalizer):
     def __init__(self):
         super().__init__()
 
