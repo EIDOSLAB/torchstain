@@ -50,7 +50,7 @@ class NumpyMacenkoNormalizer(HENormalizer):
         Y = np.reshape(OD, (-1, 3)).T
 
         # determine concentrations of the individual stains
-        C = np.linalg.lstsq(HE,Y, rcond=None)[0]
+        C = np.linalg.lstsq(HE, Y, rcond=None)[0]
 
         return C
 

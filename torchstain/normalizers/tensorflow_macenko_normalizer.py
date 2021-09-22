@@ -1,68 +1,70 @@
-import torch
-import cv2
+import tensorflow as tf
 from torchstain.normalizers.he_normalizer import HENormalizer
-from torchstain.utils import cov, percentile
+from torchstain.utils import cov, percentile, cov_tf, percentile_tf, solveLS
+import numpy as np
+import tensorflow.keras.backend as K
+
 
 """
 Source code ported from: https://github.com/schaugf/HEnorm_python
 Original implementation: https://github.com/mitkovetta/staining-normalization
 """
-class TorchMacenkoNormalizer(HENormalizer):
+class TensorFlowMacenkoNormalizer(HENormalizer):
     def __init__(self):
         super().__init__()
 
-        self.HERef = torch.tensor([[0.5626, 0.2159],
+        self.HERef = tf.constant([[0.5626, 0.2159],
                                    [0.7201, 0.8012],
                                    [0.4062, 0.5581]])
-        self.maxCRef = torch.tensor([1.9705, 1.0308])
+        self.maxCRef = tf.constant([1.9705, 1.0308])
 
     def __convert_rgb2od(self, I, Io, beta):
-        I = I.permute(1, 2, 0)
+        I = tf.transpose(I, [1, 2, 0])
 
         # calculate optical density
-        OD = -torch.log((I.reshape((-1, I.shape[-1])).float() + 1)/Io)
+        OD = -tf.math.log((tf.cast(tf.reshape(I, [tf.math.reduce_prod(I.shape[:-1]), I.shape[-1]]), tf.float32) + 1) / Io)
 
         # remove transparent pixels
-        ODhat = OD[~torch.any(OD < beta, dim=1)]
+        ODhat = OD[~tf.math.reduce_any(OD < beta, axis=1)]
 
         return OD, ODhat
 
     def __find_HE(self, ODhat, eigvecs, alpha):
         # project on the plane spanned by the eigenvectors corresponding to the two
         # largest eigenvalues
-        That = torch.matmul(ODhat, eigvecs)
-        phi = torch.atan2(That[:, 1], That[:, 0])
+        That = tf.linalg.matmul(ODhat, eigvecs)
+        phi = tf.math.atan2(That[:, 1], That[:, 0])
 
-        minPhi = percentile(phi, alpha)
-        maxPhi = percentile(phi, 100 - alpha)
+        minPhi = percentile_tf(phi, alpha)
+        maxPhi = percentile_tf(phi, 100 - alpha)
 
-        vMin = torch.matmul(eigvecs, torch.stack((torch.cos(minPhi), torch.sin(minPhi)))).unsqueeze(1)
-        vMax = torch.matmul(eigvecs, torch.stack((torch.cos(maxPhi), torch.sin(maxPhi)))).unsqueeze(1)
+        vMin = tf.matmul(eigvecs, tf.expand_dims(tf.stack((tf.math.cos(minPhi), tf.math.sin(minPhi))), axis=-1))
+        vMax = tf.matmul(eigvecs, tf.expand_dims(tf.stack((tf.math.cos(maxPhi), tf.math.sin(maxPhi))), axis=-1))
 
         # a heuristic to make the vector corresponding to hematoxylin first and the
         # one corresponding to eosin second
-        HE = torch.where(vMin[0] > vMax[0], torch.cat((vMin, vMax), dim=1), torch.cat((vMax, vMin), dim=1))
+        HE = tf.where(vMin[0] > vMax[0], tf.concat((vMin, vMax), axis=1), tf.concat((vMax, vMin), axis=1))
 
         return HE
 
     def __find_concentration(self, OD, HE):
         # rows correspond to channels (RGB), columns to OD values
-        Y = OD.T
+        Y = tf.transpose(OD)
 
         # determine concentrations of the individual stains
-        return torch.lstsq(Y, HE)[0][:2]
+        return solveLS(HE, Y)[:2]
 
     def __compute_matrices(self, I, Io, alpha, beta):
         OD, ODhat = self.__convert_rgb2od(I, Io=Io, beta=beta)
 
         # compute eigenvectors
-        _, eigvecs = torch.symeig(cov(ODhat.T), eigenvectors=True)
-        eigvecs = eigvecs[:, [1, 2]]
+        _, eigvecs = tf.linalg.eigh(cov_tf(tf.transpose(ODhat)))
+        eigvecs = eigvecs[:, 1:3]
 
         HE = self.__find_HE(ODhat, eigvecs, alpha)
 
         C = self.__find_concentration(OD, HE)
-        maxC = torch.stack([percentile(C[0, :], 99), percentile(C[1, :], 99)])
+        maxC = tf.stack([percentile_tf(C[0, :], 99), percentile_tf(C[1, :], 99)])
 
         return HE, C, maxC
 
@@ -99,22 +101,22 @@ class TorchMacenkoNormalizer(HENormalizer):
         HE, C, maxC = self.__compute_matrices(I, Io, alpha, beta)
 
         # normalize stain concentrations
-        C *= (self.maxCRef / maxC).unsqueeze(-1)
+        C *= tf.expand_dims((self.maxCRef / maxC), axis=-1)
 
         # recreate the image using reference mixing matrix
-        Inorm = Io * torch.exp(-torch.matmul(self.HERef, C))
-        Inorm[Inorm > 255] = 255
-        Inorm = Inorm.T.reshape(h, w, c).int()
+        Inorm = Io * tf.math.exp(-tf.linalg.matmul(self.HERef, C))
+        Inorm = tf.clip_by_value(Inorm, 0, 255)
+        Inorm = tf.cast(tf.reshape(tf.transpose(Inorm), shape=(h, w, c)), tf.int32)
 
         H, E = None, None
 
         if stains:
-            H = torch.mul(Io, torch.exp(torch.matmul(-self.HERef[:, 0].unsqueeze(-1), C[0, :].unsqueeze(0))))
-            H[H > 255] = 255
-            H = H.T.reshape(h, w, c).int()
+            H = tf.math.multiply(Io, tf.math.exp(tf.linalg.matmul(-tf.expand_dims(self.HERef[:, 0], axis=-1), tf.expand_dims(C[0, :], axis=0))))
+            H = tf.clip_by_value(H, 0, 255)
+            H = tf.cast(tf.reshape(tf.transpose(H), shape=(h, w, c)), tf.int32)
 
-            E = torch.mul(Io, torch.exp(torch.matmul(-self.HERef[:, 1].unsqueeze(-1), C[1, :].unsqueeze(0))))
-            E[E > 255] = 255
-            E = E.T.reshape(h, w, c).int()
+            E = tf.math.multiply(Io, tf.math.exp(tf.linalg.matmul(-tf.expand_dims(self.HERef[:, 1], axis=-1), tf.expand_dims(C[1, :], axis=0))))
+            E = tf.clip_by_value(E, 0, 255)
+            E = tf.cast(tf.reshape(tf.transpose(E), shape=(h, w, c)), tf.int32)
 
         return Inorm, H, E
