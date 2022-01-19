@@ -22,7 +22,6 @@ import cv2
 target = cv2.cvtColor(cv2.imread("./data/target.png"), cv2.COLOR_BGR2RGB)
 to_transform = cv2.cvtColor(cv2.imread("./data/source.png"), cv2.COLOR_BGR2RGB)
 
-
 T = transforms.Compose([
     transforms.ToTensor(),
     transforms.Lambda(lambda x: x*255)
