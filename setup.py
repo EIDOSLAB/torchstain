@@ -22,7 +22,7 @@ setup(
         'tensorflow'
     ],
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
         "Programming Language :: Python :: 3.6",
