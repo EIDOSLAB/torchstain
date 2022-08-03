@@ -49,6 +49,9 @@ jobs:
       - name: Install dependencies
         run: pip install wheel setuptools torch tensorflow numpy pytest
 
+      - name: Install test dependencies
+        run: pip install
+
       - name: Download artifact
         uses: actions/download-artifact@master
         with:
