@@ -8,7 +8,7 @@ import time
 
 
 size = 1024
-curr_file_path = os.path.dirname(os.path.realpath(__file__))
+curr_file_path = os.path.realpath(__file__)
 target = cv2.resize(cv2.cvtColor(cv2.imread(curr_file_path + "../data/target.png"), cv2.COLOR_BGR2RGB), (size, size))
 to_transform = cv2.resize(cv2.cvtColor(cv2.imread(curr_file_path + "../data/source.png"), cv2.COLOR_BGR2RGB), (size, size))
 
