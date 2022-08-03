@@ -1,5 +1,4 @@
 import torch
-import cv2
 from torchstain.normalizers.he_normalizer import HENormalizer
 from torchstain.utils import cov, percentile
 
