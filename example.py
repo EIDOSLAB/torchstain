@@ -10,7 +10,7 @@ size = 1024
 target = cv2.resize(cv2.cvtColor(cv2.imread("./data/target.png"), cv2.COLOR_BGR2RGB), (size, size))
 to_transform = cv2.resize(cv2.cvtColor(cv2.imread("./data/source.png"), cv2.COLOR_BGR2RGB), (size, size))
 
-normalizer = torchstain.MacenkoNormalizer(backend='numpy')
+normalizer = torchstain.torch.MacenkoNormalizer(backend='numpy')
 normalizer.fit(target)
 
 T = transforms.Compose([
@@ -18,10 +18,10 @@ T = transforms.Compose([
     transforms.Lambda(lambda x: x*255)
 ])
 
-torch_normalizer = torchstain.MacenkoNormalizer(backend='torch')
+torch_normalizer = torchstain.torch.MacenkoNormalizer(backend='torch')
 torch_normalizer.fit(T(target))
 
-tf_normalizer = torchstain.MacenkoNormalizer(backend='tensorflow')
+tf_normalizer = torchstain.tf.MacenkoNormalizer(backend='tensorflow')
 tf_normalizer.fit(T(target))
 
 t_to_transform = T(to_transform)

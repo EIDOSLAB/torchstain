@@ -1,6 +1,6 @@
 import torch
-from torchstain.normalizers.he_normalizer import HENormalizer
-from torchstain.utils import cov, percentile
+from torchstain.base.normalizers.he_normalizer import HENormalizer
+from torchstain.torch_backend.utils import cov, percentile
 
 """
 Source code ported from: https://github.com/schaugf/HEnorm_python
