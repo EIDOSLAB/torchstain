@@ -1,2 +1,1 @@
-import torchstain.tf_backend.normalizers.tensorflow_macenko_normalizer
-
+from torchstain.tf_backend import normalizers, utils

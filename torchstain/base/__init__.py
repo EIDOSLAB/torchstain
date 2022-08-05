@@ -1,1 +1,1 @@
-import torchstain.base.normalizers.macenko_normalizer
+from torchstain.base import normalizers
