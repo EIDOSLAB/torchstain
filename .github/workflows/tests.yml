@@ -60,7 +60,7 @@ jobs:
       - name: Run tests
         run: |
           pytest -v tests/test_utils.py
-          pytest -v tests/test_norrmalizers.py
+          pytest -v tests/test_normalizers.py
 
   test-tf:
     needs: build
@@ -86,10 +86,10 @@ jobs:
         run: pip install --find-links=${{github.workspace}} torchstain[tf]
 
       - name: Install test dependencies
-        run: pip install opencv-python torchvision scikit-image pytest
+        run: pip install opencv-python scikit-image pytest
 
       - name: Run tests
-        run: pytest -v tests/test_tf_norm_only.py
+        run: pytest -v tests/test_tf_normalizer.py
 
   test-torch:
     needs: build
@@ -118,4 +118,4 @@ jobs:
         run: pip install opencv-python torchvision scikit-image pytest
 
       - name: Run tests
-        run: pytest -v tests/test_torch_norm_only.py
+        run: pytest -v tests/test_torch_normalizer.py

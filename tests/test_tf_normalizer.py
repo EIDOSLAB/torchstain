@@ -1,7 +1,7 @@
 import os
 import cv2
 import torchstain
-from torchvision import transforms
+import tensorflow as tf
 import time
 from skimage.metrics import structural_similarity as ssim
 import numpy as np
@@ -12,17 +12,17 @@ target = cv2.resize(cv2.cvtColor(cv2.imread(os.path.join(curr_file_path, "../dat
 to_transform = cv2.resize(cv2.cvtColor(cv2.imread(os.path.join(curr_file_path, "../data/source.png")), cv2.COLOR_BGR2RGB), (size, size))
 
 # setup preprocessing and preprocess image to be normalized
-T = transforms.Compose([
-    transforms.ToTensor(),
-    transforms.Lambda(lambda x: x*255)
-])
+T1 = lambda x: tf.convert_to_tensor(np.moveaxis(x, -1, 0).astype("float32"))  #  * 255
 t_to_transform = T(to_transform)
 
+print(to_transform.shape)
+print(t_to_transform.shape)
+
 # initialize normalizers for each backend and fit to target image
-normalizer = torchstain.torch.normalizers.MacenkoNormalizer(backend='numpy')
+normalizer = torchstain.base.normalizers.macenko_normalizer.MacenkoNormalizer(backend='numpy')
 normalizer.fit(target)
 
-tf_normalizer = torchstain.tf.normalizers.MacenkoNormalizer(backend='tensorflow')
+tf_normalizer = torchstain.base.normalizers.macenko_normalizer.MacenkoNormalizer(backend='tensorflow')
 tf_normalizer.fit(T(target))
 
 # transform

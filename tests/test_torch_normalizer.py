@@ -20,10 +20,10 @@ T = transforms.Compose([
 t_to_transform = T(to_transform)
 
 # initialize normalizers for each backend and fit to target image
-normalizer = torchstain.torch.normalizers.MacenkoNormalizer(backend='numpy')
+normalizer = torchstain.base.normalizers.macenko_normalizer.MacenkoNormalizer(backend='numpy')
 normalizer.fit(target)
 
-torch_normalizer = torchstain.torch.normalizers.MacenkoNormalizer(backend='torch')
+torch_normalizer = torchstain.base.normalizers.macenko_normalizer.MacenkoNormalizer(backend='torch')
 torch_normalizer.fit(T(target))
 
 # transform
