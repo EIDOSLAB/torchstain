@@ -16,4 +16,4 @@ def test_percentile():
     p_np = np.percentile(x, p, interpolation='nearest')
     p_t = torchstain.utils.percentile(torch.tensor(x), p)
 
-    np.testing.assert_equal(p_np, p_t)
+    np.testing.assert_almost_equal(p_np, p_t)
