@@ -1,5 +1,5 @@
 import numpy as np
-from .he_normalizer import HENormalizer
+from ...base.normalizers.he_normalizer import HENormalizer
 
 """
 Source code adapted from: https://github.com/schaugf/HEnorm_python

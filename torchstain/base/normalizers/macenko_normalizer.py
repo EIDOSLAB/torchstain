@@ -1,4 +1,4 @@
-from .numpy_macenko_normalizer import NumpyMacenkoNormalizer
+from ...numpy.normalizers.numpy_macenko_normalizer import NumpyMacenkoNormalizer
 
 
 def MacenkoNormalizer(backend='torch'):
