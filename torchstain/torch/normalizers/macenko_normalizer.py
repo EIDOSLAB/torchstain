@@ -1,6 +1,6 @@
 from .numpy_macenko_normalizer import NumpyMacenkoNormalizer
 from .torch_macenko_normalizer import TorchMacenkoNormalizer
-from .tensorflow_macenko_normalizer import TensorFlowMacenkoNormalizer
+from torchstain.tf.normalizers.tensorflow_macenko_normalizer import TensorFlowMacenkoNormalizer
 
 def MacenkoNormalizer(backend='torch'):
     if backend == 'numpy':

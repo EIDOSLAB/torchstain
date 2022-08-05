@@ -17,10 +17,12 @@ setup(
     packages=find_packages(exclude=('tests')),
     zip_safe=False,
     install_requires=[
-        'torch',
-        'numpy',
-        'tensorflow'
+        'numpy'
     ],
+    extras_require={
+        "tf": ["tensorflow"],
+        "torch": ["torch"],
+    },
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
