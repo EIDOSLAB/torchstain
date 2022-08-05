@@ -11,7 +11,7 @@ setup(
     long_description=README,
     long_description_content_type='text/markdown',
     url='https://github.com/EIDOSlab/torchstain',
-    author='EIDOSlab',
+    author='Carlo Alberto Barbano, André Pedersen',
     author_email='eidoslab@di.unito.it',
     license='MIT',
     packages=find_packages(exclude=('tests')),
