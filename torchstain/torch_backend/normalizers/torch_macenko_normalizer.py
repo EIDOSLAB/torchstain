@@ -1,5 +1,5 @@
 import torch
-from torchstain.base.normalizers.he_normalizer import HENormalizer
+from torchstain.core.normalizers.he_normalizer import HENormalizer
 from torchstain.torch_backend.utils import cov, percentile
 
 """
