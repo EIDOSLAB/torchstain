@@ -1,5 +1,9 @@
 # torchstain
 
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![tests](https://github.com/andreped/torchstain/workflows/tests/badge.svg)](https://github.com/andreped/torchstain/actions)
+[![Pip Downloads](https://img.shields.io/pypi/dm/torchstain?label=pip%20downloads&logo=python)](https://pypi.org/project/torchstain/)
+
 Pytorch-compatible normalization tools for histopathological images.
 Normalization algorithms currently implemented:
 
