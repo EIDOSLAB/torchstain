@@ -51,8 +51,10 @@ jobs:
         with:
           name: "Python wheel"
 
-      - name: Install wheel
-        run: pip install --find-links=${{github.workspace}} torchstain
+      - name: Install deps and wheel
+        run: |
+          pip install tensorflow torch
+          pip install --find-links=${{github.workspace}} torchstain
 
       - name: Install test dependencies
         run: pip install opencv-python torchvision scikit-image pytest

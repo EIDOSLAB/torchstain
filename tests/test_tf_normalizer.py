@@ -12,7 +12,7 @@ target = cv2.resize(cv2.cvtColor(cv2.imread(os.path.join(curr_file_path, "../dat
 to_transform = cv2.resize(cv2.cvtColor(cv2.imread(os.path.join(curr_file_path, "../data/source.png")), cv2.COLOR_BGR2RGB), (size, size))
 
 # setup preprocessing and preprocess image to be normalized
-T1 = lambda x: tf.convert_to_tensor(np.moveaxis(x, -1, 0).astype("float32"))  #  * 255
+T = lambda x: tf.convert_to_tensor(np.moveaxis(x, -1, 0).astype("float32"))  #  * 255
 t_to_transform = T(to_transform)
 
 print(to_transform.shape)
