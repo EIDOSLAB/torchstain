@@ -18,9 +18,9 @@ setup(
                 'torchstain': 'torchstain',
                 'torchstain.torch': 'torchstain/torch',
                 'torchstain.tf': 'torchstain/tf'},
-    packages=['torchstain', 'torchstain.torch',
-              'torchstain.tf'],
-    #packages=find_packages(exclude=('tests')),
+    #packages=['torchstain', 'torchstain.torch',
+    #          'torchstain.tf'],
+    packages=find_packages(exclude=('tests')),
     zip_safe=False,
     install_requires=[
         'numpy'
