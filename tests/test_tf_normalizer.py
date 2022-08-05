@@ -20,10 +20,10 @@ def test_normalize_tf():
     print(t_to_transform.shape)
 
     # initialize normalizers for each backend and fit to target image
-    normalizer = torchstain.base.normalizers.macenko_normalizer.MacenkoNormalizer(backend='numpy')
+    normalizer = torchstain.normalizers.MacenkoNormalizer(backend='numpy')
     normalizer.fit(target)
 
-    tf_normalizer = torchstain.base.normalizers.macenko_normalizer.MacenkoNormalizer(backend='tensorflow')
+    tf_normalizer = torchstain.normalizers.MacenkoNormalizer(backend='tensorflow')
     tf_normalizer.fit(T(target))
 
     # transform

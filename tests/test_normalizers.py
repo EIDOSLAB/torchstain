@@ -24,10 +24,10 @@ def test_normalize_all():
     normalizer = torchstain.base.normalizers.macenko_normalizer.MacenkoNormalizer(backend='numpy')
     normalizer.fit(target)
 
-    torch_normalizer = torchstain.base.normalizers.macenko_normalizer.MacenkoNormalizer(backend='torch')
+    torch_normalizer = torchstain.normalizers.MacenkoNormalizer(backend='torch')
     torch_normalizer.fit(T(target))
 
-    tf_normalizer = torchstain.base.normalizers.macenko_normalizer.MacenkoNormalizer(backend='tensorflow')
+    tf_normalizer = torchstain.normalizers.MacenkoNormalizer(backend='tensorflow')
     tf_normalizer.fit(T(target))
 
     # transform
