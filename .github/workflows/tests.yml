@@ -19,7 +19,7 @@ jobs:
           python-version: 3.6
 
       - name: Install dependencies
-        run: pip install wheel setuptools torch tensorflow numpy
+        run: pip install wheel setuptools
 
       - name: Build wheel
         run: python setup.py bdist_wheel
@@ -46,12 +46,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install dependencies
-        run: pip install wheel setuptools torch tensorflow numpy
-
-      - name: Install test dependencies
-        run: pip install opencv-python torchvision scikit-image pytest
-
       - name: Download artifact
         uses: actions/download-artifact@master
         with:
@@ -60,6 +54,68 @@ jobs:
       - name: Install wheel
         run: pip install --find-links=${{github.workspace}} torchstain
 
+      - name: Install test dependencies
+        run: pip install opencv-python torchvision scikit-image pytest
+
       - name: Run tests
         run: |
-          pytest -v tests
+          pytest -v tests/test_utils.py
+          pytest -v tests/test_norrmalizers.py
+
+  test-tf:
+    needs: build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ windows-2019, ubuntu-18.04, macos-11 ]
+        python-version: [ 3.6, 3.7, 3.8, 3.9 ]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Download artifact
+        uses: actions/download-artifact@master
+        with:
+          name: "Python wheel"
+
+      - name: Install wheel
+        run: pip install --find-links=${{github.workspace}} torchstain[tf]
+
+      - name: Install test dependencies
+        run: pip install opencv-python torchvision scikit-image pytest
+
+      - name: Run tests
+        run: pytest -v tests/test_tf_norm_only.py
+
+  test-torch:
+    needs: build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ windows-2019, ubuntu-18.04, macos-11 ]
+        python-version: [ 3.7 ]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Download artifact
+        uses: actions/download-artifact@master
+        with:
+          name: "Python wheel"
+
+      - name: Install wheel
+        run: pip install --find-links=${{github.workspace}} torchstain[torch]
+
+      - name: Install test dependencies
+        run: pip install opencv-python torchvision scikit-image pytest
+
+      - name: Run tests
+        run: pytest -v tests/test_torch_norm_only.py

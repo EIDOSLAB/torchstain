@@ -1,7 +1,6 @@
 import os
 import cv2
 import torchstain
-import torch
 from torchvision import transforms
 import time
 from skimage.metrics import structural_similarity as ssim
@@ -23,22 +22,16 @@ t_to_transform = T(to_transform)
 normalizer = torchstain.torch.normalizers.MacenkoNormalizer(backend='numpy')
 normalizer.fit(target)
 
-torch_normalizer = torchstain.torch.normalizers.MacenkoNormalizer(backend='torch')
-torch_normalizer.fit(T(target))
-
 tf_normalizer = torchstain.tf.normalizers.MacenkoNormalizer(backend='tensorflow')
 tf_normalizer.fit(T(target))
 
 # transform
 result_numpy, _, _ = normalizer.normalize(I=to_transform, stains=True)
-result_torch, _, _ = torch_normalizer.normalize(I=t_to_transform, stains=True)
 result_tf, _, _ = tf_normalizer.normalize(I=t_to_transform, stains=True)
 
 # convert to numpy and set dtype
 result_numpy = result_numpy.astype("float32")
-result_torch = result_torch.numpy().astype("float32")
 result_tf = result_tf.numpy().astype("float32")
 
 # assess whether the normalized images are identical across backends
-np.testing.assert_almost_equal(ssim(result_numpy.flatten(), result_torch.flatten()), 1.0, decimal=4, verbose=True)
 np.testing.assert_almost_equal(ssim(result_numpy.flatten(), result_tf.flatten()), 1.0, decimal=4, verbose=True)
