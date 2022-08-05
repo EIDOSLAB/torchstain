@@ -83,7 +83,7 @@ jobs:
           name: "Python wheel"
 
       - name: Install wheel
-        run: pip install --find-links=${{github.workspace}} torchstain[tf]
+        run: pip install "${{github.workspace}}/Python wheel/torchstain[tf]"
 
       - name: Install test dependencies
         run: pip install opencv-python scikit-image pytest
@@ -112,7 +112,7 @@ jobs:
           name: "Python wheel"
 
       - name: Install wheel
-        run: pip install --find-links=${{github.workspace}} torchstain[torch]
+        run: pip install "${{github.workspace}}/Python wheel/torchstain[torch]"
 
       - name: Install test dependencies
         run: pip install opencv-python torchvision scikit-image pytest
