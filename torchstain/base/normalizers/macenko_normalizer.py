@@ -1,8 +1,5 @@
 from .numpy_macenko_normalizer import NumpyMacenkoNormalizer
-import os
 
-def set_backend(value):
-    os.environ['backend'] = value
 
 def MacenkoNormalizer(backend='torch'):
     if backend == 'numpy':
