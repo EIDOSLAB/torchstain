@@ -1,6 +1,6 @@
 import tensorflow as tf
-from torchstain.torch.normalizers.he_normalizer import HENormalizer
-from torchstain.torch.utils import cov, percentile, cov_tf, percentile_tf, solveLS
+from torchstain.tf.normalizers.he_normalizer import HENormalizer
+from torchstain.tf.utils import cov_tf, percentile_tf, solveLS
 import numpy as np
 import tensorflow.keras.backend as K
 
