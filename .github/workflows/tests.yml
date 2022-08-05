@@ -47,10 +47,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: pip install wheel setuptools torch tensorflow numpy pytest scikit-image
+        run: pip install wheel setuptools torch tensorflow numpy
 
       - name: Install test dependencies
-        run: pip install opencv-python matplotlib torchvision
+        run: pip install opencv-python matplotlib torchvision scikit-image pytest
 
       - name: Download artifact
         uses: actions/download-artifact@master
