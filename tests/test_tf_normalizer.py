@@ -16,14 +16,11 @@ def test_normalize_tf():
     T = lambda x: tf.convert_to_tensor(np.moveaxis(x, -1, 0).astype("float32"))  #  * 255
     t_to_transform = T(to_transform)
 
-    print(to_transform.shape)
-    print(t_to_transform.shape)
-
     # initialize normalizers for each backend and fit to target image
-    normalizer = torchstain.base.normalizers.macenko_normalizer.MacenkoNormalizer(backend='numpy')
+    normalizer = torchstain.MacenkoNormalizer(backend='numpy')
     normalizer.fit(target)
 
-    tf_normalizer = torchstain.base.normalizers.macenko_normalizer.MacenkoNormalizer(backend='tensorflow')
+    tf_normalizer = torchstain.MacenkoNormalizer(backend='tensorflow')
     tf_normalizer.fit(T(target))
 
     # transform

@@ -21,10 +21,10 @@ def test_normalize_torch():
     t_to_transform = T(to_transform)
 
     # initialize normalizers for each backend and fit to target image
-    normalizer = torchstain.base.normalizers.macenko_normalizer.MacenkoNormalizer(backend='numpy')
+    normalizer = torchstain.MacenkoNormalizer(backend='numpy')
     normalizer.fit(target)
 
-    torch_normalizer = torchstain.base.normalizers.macenko_normalizer.MacenkoNormalizer(backend='torch')
+    torch_normalizer = torchstain.MacenkoNormalizer(backend='torch')
     torch_normalizer.fit(T(target))
 
     # transform

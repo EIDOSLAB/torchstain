@@ -5,6 +5,7 @@ __version__ = '1.1.0'
 #os.environ['backend'] = "torch"
 
 from torchstain.base.normalizers.macenko_normalizer import MacenkoNormalizer
+import torchstain.base.normalizers.macenko_normalizer
 
 try:
     import torch
