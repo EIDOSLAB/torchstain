@@ -5,6 +5,7 @@ import torchstain
 import torch
 from torchvision import transforms
 import time
+from skimage.metrics import structural_similarity as ssim
 
 
 size = 1024
@@ -35,6 +36,10 @@ result_numpy, _, _ = normalizer.normalize(I=to_transform, stains=True)
 result_torch, _, _ = torch_normalizer.normalize(I=t_to_transform, stains=True)
 result_tf, _, _ = tf_normalizer.normalize(I=t_to_transform, stains=True)
 
+# calculate SSIM to use as metric for assessment if the results are similar
+print(ssim(result_numpy, result_torch))
+print(ssim(result_numpy, result_tf))
+
 # assess whether the normalized images are identical across backends
-np.testing.assert_equal(result_numpy, result_torch)
-np.testing.assert_equal(result_numpy, result_tf)
+np.testing.assert_equal(result_numpy, result_torch, verbose=True)
+np.testing.assert_equal(result_numpy, result_tf, verbose=True)

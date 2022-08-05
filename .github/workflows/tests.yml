@@ -47,7 +47,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: pip install wheel setuptools torch tensorflow numpy pytest
+        run: pip install wheel setuptools torch tensorflow numpy pytest scikit-image
 
       - name: Install test dependencies
         run: pip install opencv-python matplotlib torchvision
