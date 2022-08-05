@@ -8,7 +8,6 @@ import time
 from skimage.metrics import structural_similarity as ssim
 import numpy as np
 
-
 size = 1024
 curr_file_path = os.path.dirname(os.path.realpath(__file__))
 target = cv2.resize(cv2.cvtColor(cv2.imread(os.path.join(curr_file_path, "../data/target.png")), cv2.COLOR_BGR2RGB), (size, size))
@@ -22,13 +21,13 @@ T = transforms.Compose([
 t_to_transform = T(to_transform)
 
 # initialize normalizers for each backend and fit to target image
-normalizer = torchstain.MacenkoNormalizer(backend='numpy')
+normalizer = torchstain.torch.MacenkoNormalizer(backend='numpy')
 normalizer.fit(target)
 
-torch_normalizer = torchstain.MacenkoNormalizer(backend='torch')
+torch_normalizer = torchstain.torch.MacenkoNormalizer(backend='torch')
 torch_normalizer.fit(T(target))
 
-tf_normalizer = torchstain.MacenkoNormalizer(backend='tensorflow')
+tf_normalizer = torchstain.tf.MacenkoNormalizer(backend='tensorflow')
 tf_normalizer.fit(T(target))
 
 # transform
