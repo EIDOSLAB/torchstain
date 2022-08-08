@@ -1,7 +1,7 @@
 from typing import Union
 import tensorflow as tf
 
-def percentile_tf(t: tf.Tensor, q: float) -> Union[int, float]:
+def percentile(t: tf.Tensor, q: float) -> Union[int, float]:
     """
     Return the ``q``-th percentile of the flattened input tensor's data.
 

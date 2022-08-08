@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-def cov_tf(x):
+def cov(x):
     """
     https://en.wikipedia.org/wiki/Covariance_matrix
     """
