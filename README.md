@@ -4,7 +4,7 @@
 [![tests](https://github.com/EIDOSLAB/torchstain/workflows/tests/badge.svg)](https://github.com/EIDOSLAB/torchstain/actions)
 [![Pip Downloads](https://img.shields.io/pypi/dm/torchstain?label=pip%20downloads&logo=python)](https://pypi.org/project/torchstain/)
 
-Pytorch-compatible normalization tools for histopathological images.
+GPU-accelerated stain normalization tools for histopathological images. Compatible with PyTorch, TensorFlow, and Numpy.
 Normalization algorithms currently implemented:
 
 - Macenko et al. [\[1\]](#reference) (ported from [numpy implementation](https://github.com/schaugf/HEnorm_python))
@@ -12,7 +12,7 @@ Normalization algorithms currently implemented:
 ## Installation
 
 ```bash
-pip3 install torchstain
+pip install torchstain
 ```
 
 ## Example Usage
@@ -31,7 +31,7 @@ T = transforms.Compose([
     transforms.Lambda(lambda x: x*255)
 ])
 
-torch_normalizer = torchstain.MacenkoNormalizer(backend='torch')
+torch_normalizer = torchstain.normalizers.MacenkoNormalizer(backend='torch')
 torch_normalizer.fit(T(target))
 
 t_to_transform = T(to_transform)

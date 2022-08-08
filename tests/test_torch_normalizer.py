@@ -7,7 +7,7 @@ import time
 from skimage.metrics import structural_similarity as ssim
 import numpy as np
 
-def test_normalize_all():
+def test_normalize_torch():
     size = 1024
     curr_file_path = os.path.dirname(os.path.realpath(__file__))
     target = cv2.resize(cv2.cvtColor(cv2.imread(os.path.join(curr_file_path, "../data/target.png")), cv2.COLOR_BGR2RGB), (size, size))
@@ -27,19 +27,13 @@ def test_normalize_all():
     torch_normalizer = torchstain.normalizers.MacenkoNormalizer(backend='torch')
     torch_normalizer.fit(T(target))
 
-    tf_normalizer = torchstain.normalizers.MacenkoNormalizer(backend='tensorflow')
-    tf_normalizer.fit(T(target))
-
     # transform
     result_numpy, _, _ = normalizer.normalize(I=to_transform, stains=True)
     result_torch, _, _ = torch_normalizer.normalize(I=t_to_transform, stains=True)
-    result_tf, _, _ = tf_normalizer.normalize(I=t_to_transform, stains=True)
 
     # convert to numpy and set dtype
     result_numpy = result_numpy.astype("float32")
     result_torch = result_torch.numpy().astype("float32")
-    result_tf = result_tf.numpy().astype("float32")
 
     # assess whether the normalized images are identical across backends
     np.testing.assert_almost_equal(ssim(result_numpy.flatten(), result_torch.flatten()), 1.0, decimal=4, verbose=True)
-    np.testing.assert_almost_equal(ssim(result_numpy.flatten(), result_tf.flatten()), 1.0, decimal=4, verbose=True)
