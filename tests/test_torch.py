@@ -1,11 +1,28 @@
 import os
 import cv2
 import torchstain
+import torchstain.torch
 import torch
-from torchvision import transforms
 import time
-from skimage.metrics import structural_similarity as ssim
 import numpy as np
+from torchvision import transforms
+from skimage.metrics import structural_similarity as ssim
+
+
+def test_cov():
+    x = np.random.randn(10, 10)
+    cov_np = np.cov(x)
+    cov_t = torchstain.torch.utils.cov(torch.tensor(x))
+
+    np.testing.assert_almost_equal(cov_np, cov_t.numpy())
+
+def test_percentile():
+    x = np.random.randn(10, 10)
+    p = 20
+    p_np = np.percentile(x, p, interpolation='nearest')
+    p_t = torchstain.torch.utils.percentile(torch.tensor(x), p)
+
+    np.testing.assert_almost_equal(p_np, p_t)
 
 def test_normalize_torch():
     size = 1024
