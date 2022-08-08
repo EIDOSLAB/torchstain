@@ -1,5 +1,6 @@
 import torch
 import torchstain
+import torchstain.torch
 import numpy as np
 
 def test_cov():
