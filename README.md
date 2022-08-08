@@ -31,7 +31,7 @@ T = transforms.Compose([
     transforms.Lambda(lambda x: x*255)
 ])
 
-torch_normalizer = torchstain.MacenkoNormalizer(backend='torch')
+torch_normalizer = torchstain.normalizers.MacenkoNormalizer(backend='torch')
 torch_normalizer.fit(T(target))
 
 t_to_transform = T(to_transform)
