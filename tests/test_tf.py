@@ -18,7 +18,7 @@ def test_percentile():
     x = np.random.randn(10, 10)
     p = 20
     p_np = np.percentile(x, p, interpolation='nearest')
-    p_t = torchstain.tf.utils.percentile(tf.convert_to_tensor(x), p)
+    p_t = torchstain.tf.utils.percentile(x, p)
 
     np.testing.assert_almost_equal(p_np, p_t)
 
