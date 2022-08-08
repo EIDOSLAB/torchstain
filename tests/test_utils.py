@@ -13,7 +13,7 @@ def test_cov():
 def test_percentile():
     x = np.random.randn(10, 10)
     p = 20
-    p_np = np.percentile(x, p, interpolation='nearest')
+    p_np = np.percentile(x, p, method='nearest')
     p_t = torchstain.torch.utils.percentile(torch.tensor(x), p)
 
     np.testing.assert_almost_equal(p_np, p_t)
