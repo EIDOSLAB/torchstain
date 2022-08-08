@@ -22,7 +22,6 @@ def test_percentile():
 
     np.testing.assert_almost_equal(p_np, p_t)
 
-
 def test_normalize_tf():
     size = 1024
     curr_file_path = os.path.dirname(os.path.realpath(__file__))
