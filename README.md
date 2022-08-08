@@ -42,6 +42,12 @@ norm, H, E = normalizer.normalize(I=t_to_transform, stains=True)
 
 ![alt text](result.png)
 
+## Implemented algorithms
+
+| Algorithm | numpy | torch | tensorflow |
+|-|-|-|-|
+| Macenko | &check; | &check; | &check; |
+
 
 ## Backend comparison
 
