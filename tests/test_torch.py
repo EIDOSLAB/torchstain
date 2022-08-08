@@ -8,7 +8,6 @@ import numpy as np
 from torchvision import transforms
 from skimage.metrics import structural_similarity as ssim
 
-
 def test_cov():
     x = np.random.randn(10, 10)
     cov_np = np.cov(x)
