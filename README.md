@@ -15,6 +15,8 @@ Normalization algorithms currently implemented:
 pip install torchstain
 ```
 
+To install a specific backend use either ```torchstain[torch]``` or ```torchstain[tf]```. The numpy backend is included by default in both.
+
 ## Example Usage
 
 ```python
