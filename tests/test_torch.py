@@ -3,10 +3,15 @@ import cv2
 import torchstain
 import torchstain.torch
 import torch
+import torchvision
 import time
 import numpy as np
 from torchvision import transforms
 from skimage.metrics import structural_similarity as ssim
+
+
+def setup_function(fn):
+    print("torch version:", torch.__version__, "torchvision version:", torchvision.__version__)
 
 def test_cov():
     x = np.random.randn(10, 10)
