@@ -7,7 +7,7 @@ README = (HERE / "README.md").read_text()
 setup(
     name='torchstain',
     version='1.2.0',
-    description=' Stain normalization tools for histological analysis and computational pathology',
+    description='Stain normalization tools for histological analysis and computational pathology',
     long_description=README,
     long_description_content_type='text/markdown',
     url='https://github.com/EIDOSlab/torchstain',
