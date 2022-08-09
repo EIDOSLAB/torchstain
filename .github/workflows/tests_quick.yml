@@ -2,11 +2,11 @@ name: tests
 
 on:
   push:
-    branches:
-      - '*'
+    branches-ignore:
+      - main
   pull_request:
-    branches:
-      - '*'
+    branches-ignore:
+      - main
 
 jobs:
   build:
@@ -33,19 +33,14 @@ jobs:
 
   test-tf:
     needs: build
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ windows-2019, ubuntu-18.04, macos-11 ]
-        python-version: [ 3.7, 3.8, 3.9 ]
-        tf-version: [2.7.0, 2.8.0, 2.9.0]
+    runs-on: ubuntu-18.04
 
     steps:
       - uses: actions/checkout@v1
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.8
 
       - name: Download artifact
         uses: actions/download-artifact@master
@@ -54,7 +49,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install tensorflow==${{ matrix.tf-version }} protobuf==3.20.* opencv-python-headless scikit-image
+          pip install tensorflow protobuf==3.20.* opencv-python-headless scikit-image
           pip install pytest
 
       - name: Install wheel
@@ -65,24 +60,14 @@ jobs:
 
   test-torch:
     needs: build
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ windows-2019, ubuntu-18.04, macos-11 ]
-        python-version: [ 3.6, 3.7, 3.8, 3.9 ]
-        pytorch-version: [1.8.0, 1.9.0, 1.10.0, 1.11.0, 1.12.0]
-        exclude:
-          - python-version: 3.6
-            pytorch-version: 1.11.0
-          - python-version: 3.6
-            pytorch-version: 1.12.0
+    runs-on: ubuntu-18.04
 
     steps:
       - uses: actions/checkout@v1
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.8
 
       - name: Download artifact
         uses: actions/download-artifact@master
@@ -91,7 +76,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install torch==${{ matrix.pytorch-version }} torchvision opencv-python-headless scikit-image
+          pip install torch torchvision opencv-python-headless scikit-image
           pip install pytest
 
       - name: Install wheel
