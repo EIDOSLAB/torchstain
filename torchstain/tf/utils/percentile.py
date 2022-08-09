@@ -6,7 +6,6 @@ def percentile(t: tf.Tensor, q: float) -> Union[int, float]:
     Return the ``q``-th percentile of the flattened input tensor's data.
 
     CAUTION:
-     * Needs PyTorch >= 1.1.0, as ``torch.kthvalue()`` is used.
      * Values are not interpolated, which corresponds to
        ``numpy.percentile(..., interpolation="nearest")``.
 
