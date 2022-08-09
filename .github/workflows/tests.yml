@@ -62,7 +62,7 @@ jobs:
         run: pip install opencv-python scikit-image pytest
 
       - name: Run tests
-        run: pytest -v tests/test_tf.py
+        run: pytest -vs tests/test_tf.py
 
   test-torch:
     needs: build
@@ -92,7 +92,7 @@ jobs:
           pip install --find-links=${{github.workspace}} torchstain
 
       - name: Install test dependencies
-        run: pip install --no-dependencies opencv-python torchvision scikit-image pytest
+        run: pip install opencv-python torchvision scikit-image pytest
 
       - name: Run tests
-        run: pytest -v tests/test_torch.py
+        run: pytest -vs tests/test_torch.py
