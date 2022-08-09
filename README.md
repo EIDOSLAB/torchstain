@@ -3,6 +3,9 @@
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![tests](https://github.com/EIDOSLAB/torchstain/workflows/tests/badge.svg)](https://github.com/EIDOSLAB/torchstain/actions)
 [![Pip Downloads](https://img.shields.io/pypi/dm/torchstain?label=pip%20downloads&logo=python)](https://pypi.org/project/torchstain/)
+[![DOI](https://zenodo.org/badge/323590093.svg)](https://zenodo.org/badge/latestdoi/323590093)
+
+
 
 GPU-accelerated stain normalization tools for histopathological images. Compatible with PyTorch, TensorFlow, and Numpy.
 Normalization algorithms currently implemented:
@@ -69,3 +72,23 @@ Results with 10 runs per size on a Intel(R) Core(TM) i5-8365U CPU @ 1.60GHz
 ## Reference
 
 - [1] Macenko, Marc, et al. "A method for normalizing histology slides for quantitative analysis." 2009 IEEE International Symposium on Biomedical Imaging: From Nano to Macro. IEEE, 2009.
+
+
+## Citing
+
+If you find this software useful for your research, please cite it as: 
+
+
+```bibtex
+@software{barbano2022torchstain,
+  author       = {Carlo Alberto Barbano and
+                  André Pedersen},
+  title        = {EIDOSLAB/torchstain: v1.2.0-rc1},
+  month        = aug,
+  year         = 2022,
+  publisher    = {Zenodo},
+  version      = {v1.2.0-rc1},
+  doi          = {10.5281/zenodo.6976410},
+  url          = {https://doi.org/10.5281/zenodo.6976410}
+}
+```
