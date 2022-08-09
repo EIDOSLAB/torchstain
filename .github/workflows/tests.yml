@@ -53,16 +53,16 @@ jobs:
         with:
           name: "Python wheel"
 
-      - name: Install deps and wheel
+      - name: Install dependencies
         run: |
-          pip install tensorflow==${{ matrix.tf-version }} protobuf==3.20.*
-          pip install --find-links=${{github.workspace}} torchstain
+          pip install tensorflow==${{ matrix.tf-version }} protobuf==3.20.* opencv-python-headless scikit-image
+          pip install pytest
 
-      - name: Install test dependencies
-        run: pip install opencv-python scikit-image pytest
+      - name: Install wheel
+        run: pip install --find-links=${{github.workspace}} torchstain
 
       - name: Run tests
-        run: pytest -v tests/test_tf.py
+        run: pytest -vs tests/test_tf.py
 
   test-torch:
     needs: build
@@ -86,13 +86,13 @@ jobs:
         with:
           name: "Python wheel"
 
-      - name: Install deps and wheel wheel
+      - name: Install dependencies
         run: |
-          pip install --index-url https://download.pytorch.org/whl/cpu/torch/ --extra-index-url https://pypi.org/simple/ torch==${{ matrix.pytorch-version }}
-          pip install --find-links=${{github.workspace}} torchstain
+          pip install torch==${{ matrix.pytorch-version }} torchvision opencv-python-headless scikit-image
+          pip install pytest
 
-      - name: Install test dependencies
-        run: pip install --no-dependencies opencv-python torchvision scikit-image pytest
+      - name: Install wheel
+        run: pip install --find-links=${{github.workspace}} torchstain
 
       - name: Run tests
-        run: pytest -v tests/test_torch.py
+        run: pytest -vs tests/test_torch.py
