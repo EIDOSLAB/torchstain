@@ -41,7 +41,8 @@ jobs:
         python-version: [ 3.7, 3.8, 3.9 ]
         tf-version: [2.7.0, 2.8.0, 2.9.0]
         include:
-          - python-version: 3.6
+          - os: ubuntu-18.04
+            python-version: 3.6
             tf-version: 2.6.0
 
     steps:
