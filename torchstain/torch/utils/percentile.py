@@ -4,7 +4,7 @@ from typing import Union
 """
 Author: https://gist.github.com/spezold/42a451682422beb42bc43ad0c0967a30
 """
-def percentile(t: torch.tensor, q: float) -> Union[int, float]:
+def percentile(t: torch.Tensor, q: float) -> Union[int, float]:
     """
     Return the ``q``-th percentile of the flattenepip d input tensor's data.
 
