@@ -7,7 +7,7 @@ README = (HERE / "README.md").read_text()
 setup(
     name='torchstain',
     version='1.2.0',
-    description='Pytorch stain normalization utils',
+    description='Stain normalization utils for pytorch and tensorflow',
     long_description=README,
     long_description_content_type='text/markdown',
     url='https://github.com/EIDOSlab/torchstain',
