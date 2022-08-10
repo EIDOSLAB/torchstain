@@ -1,13 +1,13 @@
 import pathlib
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, find_namespace_packages
 
 HERE = pathlib.Path(__file__).parent
 README = (HERE / "README.md").read_text()
 
 setup(
     name='torchstain',
-    version='1.1.0',
-    description='Pytorch stain normalization utils',
+    version='1.2.0',
+    description='Stain normalization tools for histological analysis and computational pathology',
     long_description=README,
     long_description_content_type='text/markdown',
     url='https://github.com/EIDOSlab/torchstain',
@@ -17,10 +17,12 @@ setup(
     packages=find_packages(exclude=('tests')),
     zip_safe=False,
     install_requires=[
-        'torch',
-        'numpy',
-        'tensorflow'
+        'numpy'
     ],
+    extras_require={
+        "tf": ["tensorflow"],
+        "torch": ["torch"],
+    },
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',

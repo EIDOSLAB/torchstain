@@ -3,8 +3,11 @@
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![tests](https://github.com/EIDOSLAB/torchstain/workflows/tests/badge.svg)](https://github.com/EIDOSLAB/torchstain/actions)
 [![Pip Downloads](https://img.shields.io/pypi/dm/torchstain?label=pip%20downloads&logo=python)](https://pypi.org/project/torchstain/)
+[![DOI](https://zenodo.org/badge/323590093.svg)](https://zenodo.org/badge/latestdoi/323590093)
 
-Pytorch-compatible normalization tools for histopathological images.
+
+
+GPU-accelerated stain normalization tools for histopathological images. Compatible with PyTorch, TensorFlow, and Numpy.
 Normalization algorithms currently implemented:
 
 - Macenko et al. [\[1\]](#reference) (ported from [numpy implementation](https://github.com/schaugf/HEnorm_python))
@@ -12,8 +15,10 @@ Normalization algorithms currently implemented:
 ## Installation
 
 ```bash
-pip3 install torchstain
+pip install torchstain
 ```
+
+To install a specific backend use either ```torchstain[torch]``` or ```torchstain[tf]```. The numpy backend is included by default in both.
 
 ## Example Usage
 
@@ -31,7 +36,7 @@ T = transforms.Compose([
     transforms.Lambda(lambda x: x*255)
 ])
 
-torch_normalizer = torchstain.MacenkoNormalizer(backend='torch')
+torch_normalizer = torchstain.normalizers.MacenkoNormalizer(backend='torch')
 torch_normalizer.fit(T(target))
 
 t_to_transform = T(to_transform)
@@ -40,24 +45,50 @@ norm, H, E = normalizer.normalize(I=t_to_transform, stains=True)
 
 ![alt text](result.png)
 
+## Implemented algorithms
+
+| Algorithm | numpy | torch | tensorflow |
+|-|-|-|-|
+| Macenko | &check; | &check; | &check; |
+
 
 ## Backend comparison
 
 Results with 10 runs per size on a Intel(R) Core(TM) i5-8365U CPU @ 1.60GHz
 
 
-|   size | numpy avg. time   | numpy tot. time   | torch avg. time   | torch tot. time   |
-|--------|-------------------|-------------------|-------------------|-------------------|
-|    224x224 | 0.0323s ± 0.0032  | 0.3231s           | 0.0234s ± 0.0384  | 0.2340s           |
-|    448x448 | 0.1228s ± 0.0042  | 1.2280s           | 0.0395s ± 0.0168  | 0.3954s           |
-|    672x672 | 0.2653s ± 0.0106  | 2.6534s           | 0.0753s ± 0.0157  | 0.7527s           |
-|    896x896 | 0.4940s ± 0.0208  | 4.9397s           | 0.1262s ± 0.0159  | 1.2622s           |
-|   1120x1120 | 0.6888s ± 0.0081  | 6.8883s           | 0.2002s ± 0.0141  | 2.0021s           |
-|   1344x1344 | 1.0145s ± 0.0089  | 10.1448s          | 0.2703s ± 0.0136  | 2.7026s           |
-|   1568x1568 | 1.2620s ± 0.0133  | 12.6200s          | 0.3680s ± 0.0128  | 3.6795s           |
-|   1792x1792 | 1.4289s ± 0.0128  | 14.2886s          | 0.5968s ± 0.0160  | 5.9676s           |
+|   size | numpy avg. time   | torch avg. time   | tf avg. time     |
+|--------|-------------------|-------------------|------------------|
+|    224 | 0.0182s ± 0.0016  | 0.0180s ± 0.0390  | 0.0048s ± 0.0002 |
+|    448 | 0.0880s ± 0.0224  | 0.0283s ± 0.0172  | 0.0210s ± 0.0025 |
+|    672 | 0.1810s ± 0.0139  | 0.0463s ± 0.0301  | 0.0354s ± 0.0018 |
+|    896 | 0.3013s ± 0.0377  | 0.0820s ± 0.0329  | 0.0713s ± 0.0008 |
+|   1120 | 0.4694s ± 0.0350  | 0.1321s ± 0.0237  | 0.1036s ± 0.0042 |
+|   1344 | 0.6640s ± 0.0553  | 0.1665s ± 0.0026  | 0.1663s ± 0.0021 |
+|   1568 | 1.1935s ± 0.0739  | 0.2590s ± 0.0088  | 0.2531s ± 0.0031 |
+|   1792 | 1.4523s ± 0.0207  | 0.3402s ± 0.0114  | 0.3080s ± 0.0188 |
 
 
 ## Reference
 
 - [1] Macenko, Marc, et al. "A method for normalizing histology slides for quantitative analysis." 2009 IEEE International Symposium on Biomedical Imaging: From Nano to Macro. IEEE, 2009.
+
+
+## Citing
+
+If you find this software useful for your research, please cite it as: 
+
+
+```bibtex
+@software{barbano2022torchstain,
+  author       = {Carlo Alberto Barbano and
+                  André Pedersen},
+  title        = {EIDOSLAB/torchstain: v1.2.0-rc1},
+  month        = aug,
+  year         = 2022,
+  publisher    = {Zenodo},
+  version      = {v1.2.0-rc1},
+  doi          = {10.5281/zenodo.6976410},
+  url          = {https://doi.org/10.5281/zenodo.6976410}
+}
+```

@@ -1,6 +1,6 @@
 import tensorflow as tf
-from torchstain.normalizers.he_normalizer import HENormalizer
-from torchstain.utils import cov, percentile, cov_tf, percentile_tf, solveLS
+from torchstain.base.normalizers.he_normalizer import HENormalizer
+from torchstain.tf.utils import cov, percentile, solveLS
 import numpy as np
 import tensorflow.keras.backend as K
 
@@ -35,8 +35,8 @@ class TensorFlowMacenkoNormalizer(HENormalizer):
         That = tf.linalg.matmul(ODhat, eigvecs)
         phi = tf.math.atan2(That[:, 1], That[:, 0])
 
-        minPhi = percentile_tf(phi, alpha)
-        maxPhi = percentile_tf(phi, 100 - alpha)
+        minPhi = percentile(phi, alpha)
+        maxPhi = percentile(phi, 100 - alpha)
 
         vMin = tf.matmul(eigvecs, tf.expand_dims(tf.stack((tf.math.cos(minPhi), tf.math.sin(minPhi))), axis=-1))
         vMax = tf.matmul(eigvecs, tf.expand_dims(tf.stack((tf.math.cos(maxPhi), tf.math.sin(maxPhi))), axis=-1))
@@ -58,13 +58,13 @@ class TensorFlowMacenkoNormalizer(HENormalizer):
         OD, ODhat = self.__convert_rgb2od(I, Io=Io, beta=beta)
 
         # compute eigenvectors
-        _, eigvecs = tf.linalg.eigh(cov_tf(tf.transpose(ODhat)))
+        _, eigvecs = tf.linalg.eigh(cov(tf.transpose(ODhat)))
         eigvecs = eigvecs[:, 1:3]
 
         HE = self.__find_HE(ODhat, eigvecs, alpha)
 
         C = self.__find_concentration(OD, HE)
-        maxC = tf.stack([percentile_tf(C[0, :], 99), percentile_tf(C[1, :], 99)])
+        maxC = tf.stack([percentile(C[0, :], 99), percentile(C[1, :], 99)])
 
         return HE, C, maxC
 
