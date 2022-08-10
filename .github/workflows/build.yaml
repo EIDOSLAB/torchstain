@@ -1,8 +1,12 @@
 name: Build and upload to PyPI
 
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      main
+  relase:
+    types:
+      - published
 
 jobs:
   build_wheels:
@@ -29,6 +33,8 @@ jobs:
   upload_pypi:
     needs: build_wheels
     runs-on: ubuntu-18.04
+    
+    if: github.event_name == 'release' && github.event.action == 'published'
 
     steps:
       - uses: actions/download-artifact@v3
