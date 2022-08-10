@@ -83,12 +83,25 @@ If you find this software useful for your research, please cite it as:
 @software{barbano2022torchstain,
   author       = {Carlo Alberto Barbano and
                   André Pedersen},
-  title        = {EIDOSLAB/torchstain: v1.2.0-rc1},
+  title        = {EIDOSLAB/torchstain: v1.2.0-stable},
   month        = aug,
   year         = 2022,
   publisher    = {Zenodo},
-  version      = {v1.2.0-rc1},
-  doi          = {10.5281/zenodo.6976410},
-  url          = {https://doi.org/10.5281/zenodo.6976410}
+  version      = {v1.2.0-stable},
+  doi          = {10.5281/zenodo.6979540},
+  url          = {https://doi.org/10.5281/zenodo.6979540}
+}
+```
+
+Torchstain was originally developed within the [UNITOPATHO](https://github.com/EIDOSLAB/UNITOPATHO) data collection, which you can cite as:
+
+```bibtex
+@inproceedings{barbano2021unitopatho,
+  title={UniToPatho, a labeled histopathological dataset for colorectal polyps classification and adenoma dysplasia grading},
+  author={Barbano, Carlo Alberto and Perlo, Daniele and Tartaglione, Enzo and Fiandrotti, Attilio and Bertero, Luca and Cassoni, Paola and Grangetto, Marco},
+  booktitle={2021 IEEE International Conference on Image Processing (ICIP)},
+  pages={76--80},
+  year={2021},
+  organization={IEEE}
 }
 ```
