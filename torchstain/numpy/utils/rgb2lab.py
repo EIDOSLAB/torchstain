@@ -1,6 +1,4 @@
 import numpy as np
-import cv2 as cv
-import skimage
 
 
 # constant conversion matrices between color spaces: https://gist.github.com/bikz05/6fd21c812ef6ebac66e1
