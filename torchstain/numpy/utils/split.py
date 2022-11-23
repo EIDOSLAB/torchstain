@@ -1,6 +1,5 @@
 import numpy as np
 from torchstain.numpy.utils.rgb2lab import rgb2lab
-import cv2 as cv
 
 
 def csplit(I):
