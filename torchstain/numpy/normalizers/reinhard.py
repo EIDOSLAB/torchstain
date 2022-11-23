@@ -1,7 +1,11 @@
 import numpy as np
 from torchstain.base.normalizers import HENormalizer
 from torchstain.numpy.utils.rgb2lab import rgb2lab
+from torchstain.numpy.utils.lab2rgb import lab2rgb
+from torchstain.numpy.utils.split import csplit, cmerge, lab_split, lab_merge
 from torchstain.numpy.utils.stats import get_mean_std, standardize
+
+import cv2 as cv
 
 """
 Source code adapted from:
@@ -11,19 +15,32 @@ https://github.com/Peter554/StainTools/blob/master/staintools/reinhard_color_nor
 class NumpyReinhardNormalizer(HENormalizer):
     def __init__(self):
         super().__init__()
-        # unless fit() is applied, no transfer is performed
-        self.target_mus = np.ones(3)
-        self.target_stds = np.ones(3)
+        self.target_mus = None
+        self.target_stds = None
     
     def fit(self, target):
-        self.target_mus, self.target_stds = get_mean_std(target)
+        target = target.astype("float32")
+        lab = rgb2lab(target)
+        stack_ = np.array([get_mean_std(x) for x in lab_split(lab)])
+        self.target_means = stack_[:, 0]
+        self.target_stds = stack_[:, 1]
 
     def normalize(self, I):
         # convert to LAB
         lab = rgb2lab(I)
+        labs = lab_split(lab)
 
         # get summary statistics from LAB
-        mus, stds = get_mean_std(lab)
+        stack_ = np.array([get_mean_std(x) for x in labs])
+        mus = stack_[:, 0]
+        stds = stack_[:, 1]
 
-        # standardize intensities channel-wise and normalize using target means and standard deviations (one for each channel)
-        return np.dstack([standardize(x, mu_, std_) for x, mu, std_, mu_T, std_T in zip(csplit(lab), mus, stds, target_mus, target_stds)])
+        # standardize intensities channel-wise and normalize using target mus and stds
+        result = [standardize(x, mu_, std_) * std_T + mu_T for x, mu_, std_, mu_T, std_T \
+            in zip(labs, mus, stds, self.target_means, self.target_stds)]
+        
+        # rebuild LAB
+        lab = lab_merge(*result)
+
+        # finally, convert back to RGB from LAB
+        return lab2rgb(lab)
