@@ -9,6 +9,8 @@ _rgb2xyz = np.array([[0.412453, 0.357580, 0.180423],
                      [0.212671, 0.715160, 0.072169],
                      [0.019334, 0.119193, 0.950227]])
 
+_rgb2lms = _rgb2xyz
+
 # "D65": {'2': (0.95047, 1., 1.08883),   # This was: `lab_ref_white`
 #              '10': (0.94809667673716, 1, 1.0730513595166162),
 #              'R': (0.9532057125493769, 1, 1.0853843816469158)},
@@ -42,6 +44,9 @@ def rgb2labY(rgb):
 Implementation adapted from https://github.com/scikit-image/scikit-image/blob/00177e14097237ef20ed3141ed454bc81b308f82/skimage/color/colorconv.py#L704
 """
 def rgb2lab(rgb):
+    # first normalize
+    rgb = rgb.astype("float32") / 255
+
     # convert rgb -> xyz color domain
     arr = rgb.copy()
     mask = arr > 0.04045
@@ -49,10 +54,9 @@ def rgb2lab(rgb):
     arr[~mask] /= 12.92
     xyz = np.dot(arr, _rgb2xyz.T.astype(arr.dtype))
 
-    # convert xyz -> lab color domain
-
     # scale by CIE XYZ tristimulus values of the reference white point
-    arr = arr / np.array((0.95047, 1., 1.08883))
+    arr = xyz.copy()
+    arr = arr / np.asarray((0.95047, 1., 1.08883), dtype=xyz.dtype)
 
     # Nonlinear distortion and linear transformation
     mask = arr > 0.008856
@@ -65,6 +69,13 @@ def rgb2lab(rgb):
     L = (116. * y) - 16.
     a = 500.0 * (x - y)
     b = 200.0 * (y - z)
+
+    # OpenCV format
+    L *= 2.55
+    a += 128
+    b += 128
+
+    # finally, get LAB color domain
     return np.concatenate([x[..., np.newaxis] for x in [L, a, b]], axis=-1)
 
 
