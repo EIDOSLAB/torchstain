@@ -1,14 +1,22 @@
 import numpy as np
 from torchstain.numpy.utils.rgb2lab import _lms2lab, _rgb2lms
 import cv2 as cv
+import skimage
 
 
 _lms2rgb = np.linalg.inv(_rgb2lms)
 _lab2lms = np.linalg.inv(_lms2lab)
 
 
-def lab2rgb(lab):
+def lab2rgbY(lab):
     return cv.cvtColor(np.clip(lab, 0, 255).astype("uint8"), cv.COLOR_LAB2RGB)
+
+
+def lab2rgb(lab):
+    lab[..., 0] /= 2.55
+    lab[..., 1] -= 128
+    lab[..., 2] -= 128
+    return skimage.color.lab2rgb(lab)
 
 
 """
