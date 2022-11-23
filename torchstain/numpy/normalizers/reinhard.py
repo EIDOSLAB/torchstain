@@ -5,7 +5,6 @@ from torchstain.numpy.utils.lab2rgb import lab2rgb
 from torchstain.numpy.utils.split import csplit, cmerge, lab_split, lab_merge
 from torchstain.numpy.utils.stats import get_mean_std, standardize
 
-
 """
 Source code adapted from:
 https://github.com/DigitalSlideArchive/HistomicsTK/blob/master/histomicstk/preprocessing/color_normalization/reinhard.py

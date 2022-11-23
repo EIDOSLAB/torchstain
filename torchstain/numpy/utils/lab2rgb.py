@@ -1,9 +1,7 @@
 import numpy as np
 from torchstain.numpy.utils.rgb2lab import _rgb2xyz
 
-
 _xyz2rgb = np.linalg.inv(_rgb2xyz)
-
 
 """
 Implementation is based on:
