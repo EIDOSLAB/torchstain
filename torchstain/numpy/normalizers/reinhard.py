@@ -5,7 +5,6 @@ from torchstain.numpy.utils.lab2rgb import lab2rgb
 from torchstain.numpy.utils.split import csplit, cmerge, lab_split, lab_merge
 from torchstain.numpy.utils.stats import get_mean_std, standardize
 
-import cv2 as cv
 
 """
 Source code adapted from:
@@ -42,5 +41,8 @@ class NumpyReinhardNormalizer(HENormalizer):
         # rebuild LAB
         lab = lab_merge(*result)
 
-        # finally, convert back to RGB from LAB
-        return lab2rgb(lab)
+        # convert back to RGB from LAB
+        lab = lab2rgb(lab)
+
+        # rescale to [0, 255] uint8
+        return (lab * 255).astype("uint8")
