@@ -11,8 +11,7 @@ https://gist.github.com/bikz05/6fd21c812ef6ebac66e1
 https://github.com/scikit-image/scikit-image/blob/00177e14097237ef20ed3141ed454bc81b308f82/skimage/color/colorconv.py#L704
 """
 def rgb2lab(rgb):
-    # first normalize
-    rgb = rgb.astype("float32") / 255
+    rgb = rgb.astype("float32")
 
     # convert rgb -> xyz color domain
     arr = rgb.copy()

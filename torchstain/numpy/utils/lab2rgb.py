@@ -8,6 +8,7 @@ Implementation is based on:
 https://github.com/scikit-image/scikit-image/blob/00177e14097237ef20ed3141ed454bc81b308f82/skimage/color/colorconv.py#L704
 """
 def lab2rgb(lab):
+    lab = lab.astype("float32")
     # first rescale back from OpenCV format
     lab[..., 0] /= 2.55
     lab[..., 1] -= 128

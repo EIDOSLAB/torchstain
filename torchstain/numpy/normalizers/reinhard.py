@@ -17,13 +17,21 @@ class NumpyReinhardNormalizer(HENormalizer):
         self.target_stds = None
     
     def fit(self, target):
-        target = target.astype("float32")
+        # normalize
+        target = target.astype("float32") / 255
+
+        # convert to LAB
         lab = rgb2lab(target)
+
+        # get summary statistics
         stack_ = np.array([get_mean_std(x) for x in lab_split(lab)])
         self.target_means = stack_[:, 0]
         self.target_stds = stack_[:, 1]
 
     def normalize(self, I):
+        # normalize
+        I = I.astype("float32") / 255
+        
         # convert to LAB
         lab = rgb2lab(I)
         labs = lab_split(lab)
