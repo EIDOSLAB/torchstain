@@ -50,6 +50,7 @@ norm, H, E = normalizer.normalize(I=t_to_transform, stains=True)
 | Algorithm | numpy | torch | tensorflow |
 |-|-|-|-|
 | Macenko | &check; | &check; | &check; |
+| Reinhard | &check; | &cross; | &cross; |
 
 
 ## Backend comparison
