@@ -5,6 +5,7 @@ def ReinhardNormalizer(backend='numpy'):
     elif backend == "torch":
         raise NotImplementedError
     elif backend == "tensorflow":
-        raise NotImplementedError
+        from torchstain.tf.normalizers import TensorFlowReinhardNormalizer
+        return TensorFlowReinhardNormalizer()
     else:
         raise Exception(f'Unknown backend {backend}')
