@@ -43,7 +43,7 @@ t_to_transform = T(to_transform)
 norm, H, E = normalizer.normalize(I=t_to_transform, stains=True)
 ```
 
-![alt text](result.png)
+![alt text](data/result.png)
 
 ## Implemented algorithms
 
