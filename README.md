@@ -5,12 +5,11 @@
 [![Pip Downloads](https://img.shields.io/pypi/dm/torchstain?label=pip%20downloads&logo=python)](https://pypi.org/project/torchstain/)
 [![DOI](https://zenodo.org/badge/323590093.svg)](https://zenodo.org/badge/latestdoi/323590093)
 
-
-
 GPU-accelerated stain normalization tools for histopathological images. Compatible with PyTorch, TensorFlow, and Numpy.
 Normalization algorithms currently implemented:
 
 - Macenko et al. [\[1\]](#reference) (ported from [numpy implementation](https://github.com/schaugf/HEnorm_python))
+- Reinhard et al. [\[2\]](#reference) (only numpy & TensorFlow backend support)
 
 ## Installation
 
@@ -43,19 +42,18 @@ t_to_transform = T(to_transform)
 norm, H, E = normalizer.normalize(I=t_to_transform, stains=True)
 ```
 
-![alt text](result.png)
+![alt text](data/result.png)
 
 ## Implemented algorithms
 
 | Algorithm | numpy | torch | tensorflow |
 |-|-|-|-|
 | Macenko | &check; | &check; | &check; |
-
+| Reinhard | &check; | &cross; | &check; |
 
 ## Backend comparison
 
 Results with 10 runs per size on a Intel(R) Core(TM) i5-8365U CPU @ 1.60GHz
-
 
 |   size | numpy avg. time   | torch avg. time   | tf avg. time     |
 |--------|-------------------|-------------------|------------------|
@@ -68,16 +66,14 @@ Results with 10 runs per size on a Intel(R) Core(TM) i5-8365U CPU @ 1.60GHz
 |   1568 | 1.1935s ± 0.0739  | 0.2590s ± 0.0088  | 0.2531s ± 0.0031 |
 |   1792 | 1.4523s ± 0.0207  | 0.3402s ± 0.0114  | 0.3080s ± 0.0188 |
 
-
 ## Reference
 
 - [1] Macenko, Marc, et al. "A method for normalizing histology slides for quantitative analysis." 2009 IEEE International Symposium on Biomedical Imaging: From Nano to Macro. IEEE, 2009.
-
+- [2] Reinhard, Erik, et al. "Color transfer between images." IEEE Computer Graphics and Applications. IEEE, 2001.
 
 ## Citing
 
 If you find this software useful for your research, please cite it as: 
-
 
 ```bibtex
 @software{barbano2022torchstain,
