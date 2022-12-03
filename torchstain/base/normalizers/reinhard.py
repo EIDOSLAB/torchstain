@@ -3,7 +3,8 @@ def ReinhardNormalizer(backend='numpy'):
         from torchstain.numpy.normalizers import NumpyReinhardNormalizer
         return NumpyReinhardNormalizer()
     elif backend == "torch":
-        raise NotImplementedError
+        from torchstain.torch.normalizers import TorchReinhardNormalizer
+        return TorchReinhardNormalizer()
     elif backend == "tensorflow":
         from torchstain.tf.normalizers import TensorFlowReinhardNormalizer
         return TensorFlowReinhardNormalizer()
