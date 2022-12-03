@@ -7,7 +7,7 @@ def cmerge(I1, I2, I3):
     return torch.stack([I1, I2, I3], dim=0)
 
 def lab_split(I):
-    I = I.type(torch.FloatTensor)
+    I = I.type(torch.float32)
     I1, I2, I3 = csplit(I)
     return I1 / 2.55, I2 - 128, I3 - 128
 

@@ -13,19 +13,19 @@ def rgb2lab(rgb):
     # convert rgb -> xyz color domain
     mask = arr > 0.04045
     not_mask = torch.logical_not(mask)
-    arr.masked_scatter_(mask, torch.pow((arr[mask] + 0.055) / 1.055, 2.4))
-    arr.masked_scatter_(not_mask, mask / 12.92)
+    arr.masked_scatter_(mask, torch.pow((torch.masked_select(arr, mask) + 0.055) / 1.055, 2.4))
+    arr.masked_scatter_(not_mask, torch.masked_select(arr, not_mask) / 12.92)
 
     xyz = torch.tensordot(torch.t(_rgb2xyz), arr, dims=([0], [0]))
 
     # scale by CIE XYZ tristimulus values of the reference white point
-    arr = torch.mul(xyz, 1 / _white.unsqueeze(dim=-1).unsqueeze(dim=-1))
+    arr = torch.mul(xyz, 1 / _white.type(xyz.dtype).unsqueeze(dim=-1).unsqueeze(dim=-1))
 
     # nonlinear distortion and linear transformation
     mask = arr > 0.008856
     not_mask = torch.logical_not(mask)
-    arr.masked_scatter_(mask, torch.pow(arr[mask], 1. / 3.))
-    arr.masked_scatter_(not_mask, 7.787 * arr[~mask] + 16. / 166.)
+    arr.masked_scatter_(mask, torch.pow(torch.masked_select(arr, mask), 1 / 3))
+    arr.masked_scatter_(not_mask, 7.787 * torch.masked_select(arr, not_mask) + 16 / 166)
 
     # get each channel as individual tensors
     x, y, z = arr[0], arr[1], arr[2]

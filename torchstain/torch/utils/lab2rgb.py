@@ -20,8 +20,8 @@ def lab2rgb(lab):
     # apply boolean transforms
     mask = out > 0.2068966
     not_mask = torch.logical_not(mask)
-    out.masked_scatter_(mask, torch.pow(out, 3))
-    out.masked_scatter_(not_mask, (out - 16 / 116) / 7.787)
+    out.masked_scatter_(mask, torch.pow(torch.masked_select(out, mask), 3))
+    out.masked_scatter_(not_mask, (torch.masked_select(out, not_mask) - 16 / 116) / 7.787)
 
     # rescale to the reference white (illuminant)
     out = torch.mul(out, _white.type(out.dtype).unsqueeze(dim=-1).unsqueeze(dim=-1))
@@ -30,6 +30,6 @@ def lab2rgb(lab):
     arr = torch.tensordot(out, torch.t(_xyz2rgb).type(out.dtype), dims=([0], [0]))
     mask = arr > 0.0031308
     not_mask = torch.logical_not(mask)
-    arr.masked_scatter(mask, 1.055 * torch.pow(arr, 1 / 2.4) - 0.055)
-    arr.masked_scatter(not_mask, arr * 12.92)
+    arr.masked_scatter_(mask, 1.055 * torch.pow(torch.masked_select(arr, mask), 1 / 2.4) - 0.055)
+    arr.masked_scatter_(not_mask, torch.masked_select(arr, not_mask) * 12.92)
     return torch.clamp(arr, 0, 1)
