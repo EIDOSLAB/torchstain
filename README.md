@@ -10,6 +10,7 @@ Normalization algorithms currently implemented:
 
 - Macenko et al. [\[1\]](#reference) (ported from [numpy implementation](https://github.com/schaugf/HEnorm_python))
 - Reinhard et al. [\[2\]](#reference) (only numpy & TensorFlow backend support)
+- Vahadane et al. [\[3\]](#reference) (only numpy backend support)
 
 ## Installation
 
@@ -50,6 +51,7 @@ norm, H, E = normalizer.normalize(I=t_to_transform, stains=True)
 |-|-|-|-|
 | Macenko | &check; | &check; | &check; |
 | Reinhard | &check; | &cross; | &check; |
+| Vahadane | &check; | &cross; | &cross; |
 
 ## Backend comparison
 
@@ -68,8 +70,9 @@ Results with 10 runs per size on a Intel(R) Core(TM) i5-8365U CPU @ 1.60GHz
 
 ## Reference
 
-- [1] Macenko, Marc, et al. "A method for normalizing histology slides for quantitative analysis." 2009 IEEE International Symposium on Biomedical Imaging: From Nano to Macro. IEEE, 2009.
-- [2] Reinhard, Erik, et al. "Color transfer between images." IEEE Computer Graphics and Applications. IEEE, 2001.
+- [1] Macenko, Marc et al. "A method for normalizing histology slides for quantitative analysis." 2009 IEEE International Symposium on Biomedical Imaging: From Nano to Macro. IEEE, 2009.
+- [2] Reinhard, Erik et al. "Color transfer between images." IEEE Computer Graphics and Applications. IEEE, 2001.
+- [3] Vahadane, Abhishek et al. "Structure-preserved color normalization for histopathological images". IEEE, 2015
 
 ## Citing
 
