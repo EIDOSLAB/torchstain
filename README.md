@@ -49,7 +49,7 @@ norm, H, E = normalizer.normalize(I=t_to_transform, stains=True)
 
 ## Backend comparison
 
-Results with 10 runs per size on a Intel(R) Core(TM) i5-8365U CPU @ 1.60GHz
+Results with 10 runs per size on a Intel(R) Core(TM) i5-8365U CPU @ 1.60GHz using Macenko.
 
 |   size | numpy avg. time   | torch avg. time   | tf avg. time     |
 |--------|-------------------|-------------------|------------------|
@@ -62,7 +62,7 @@ Results with 10 runs per size on a Intel(R) Core(TM) i5-8365U CPU @ 1.60GHz
 |   1568 | 1.1935s ± 0.0739  | 0.2590s ± 0.0088  | 0.2531s ± 0.0031 |
 |   1792 | 1.4523s ± 0.0207  | 0.3402s ± 0.0114  | 0.3080s ± 0.0188 |
 
-## Reference
+## References
 
 - [1] Macenko, Marc et al. "A method for normalizing histology slides for quantitative analysis." 2009 IEEE International Symposium on Biomedical Imaging: From Nano to Macro. IEEE, 2009.
 - [2] Reinhard, Erik et al. "Color transfer between images." IEEE Computer Graphics and Applications. IEEE, 2001.
