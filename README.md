@@ -10,9 +10,9 @@ Normalization algorithms currently implemented:
 
 | Algorithm | numpy | torch | tensorflow |
 |-|-|-|-|
-| Macenko [\[1\]](#reference) | &check; | &check; | &check; |
-| Reinhard [\[2\]](#reference)| &check; | &cross; | &check; |
-| Vahadane [\[3\]](#reference) | &check; | &cross; | &cross; |
+| Macenko [\[1\]](#references) | &check; | &check; | &check; |
+| Reinhard [\[2\]](#references)| &check; | &cross; | &check; |
+| Vahadane [\[3\]](#references) | &check; | &cross; | &cross; |
 
 ## Installation
 
