@@ -11,8 +11,9 @@ https://github.com/DigitalSlideArchive/HistomicsTK/blob/master/histomicstk/prepr
 https://github.com/Peter554/StainTools/blob/master/staintools/reinhard_color_normalizer.py
 """
 class TensorFlowReinhardNormalizer(HENormalizer):
-    def __init__(self):
+    def __init__(self, method=None):
         super().__init__()
+        self.method = method
         self.target_mus = None
         self.target_stds = None
     
@@ -41,9 +42,26 @@ class TensorFlowReinhardNormalizer(HENormalizer):
         mus = stack_[:, 0]
         stds = stack_[:, 1]
 
-        # standardize intensities channel-wise and normalize using target mus and stds
-        result = [standardize(x, mu_, std_) * std_T + mu_T for x, mu_, std_, mu_T, std_T \
-            in zip(labs, mus, stds, self.target_means, self.target_stds)]
+        # normalize
+        if self.method is None:
+            # standardize intensities channel-wise and normalize using target mus and stds
+            result = [standardize(x, mu_, std_) * std_T + mu_T for x, mu_, std_, mu_T, std_T \
+                in zip(labs, mus, stds, self.target_means, self.target_stds)]
+
+        elif self.method == "modified":
+            # calculate q
+            q = (self.target_stds[0] - stds[0]) / self.target_stds[0]
+            q = 0.05 if q <= 0 else q
+
+            # normalize each channel independently
+            l_norm = mus[0] + (labs[0] - mus[0]) * (1 + q)
+            a_norm = self.target_means[1] + (labs[1] - mus[1])
+            b_norm = self.target_means[2] + (labs[2] - mus[2])
+
+            result = [l_norm, a_norm, b_norm]
+
+        else:
+            raise ValueError("Unsupported 'method' was chosen. Choose either {None, 'modified'}.")
         
         # rebuild LAB
         lab = lab_merge(*result)
