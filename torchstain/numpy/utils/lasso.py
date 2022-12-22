@@ -22,16 +22,16 @@ def z_compute(X):
     return np.sum(X * X, axis = 0)
 
 
-def coordinate_descent(y, X, w, alpha, z, tolerance):
+def coordinate_descent(y, X, w, alpha, z, tol):
     max_step = 100
     iteration = 0
-    while max_step > tolerance:
+    while max_step > tol:
         iteration += 1
         old_weights = np.copy(w)
         for j in range(len(w)):
             rho_j = rho_compute(y, X, w, j)
             if j == 0:
-                w[j] = rho_j/z[j]
+                w[j] = rho_j / z[j]
             elif rho_j < -alpha * len(y):
                 w[j] = (rho_j + (alpha * len(y))) / z[j]
             elif rho_j > -alpha * len(y) and rho_j < alpha * len(y):
@@ -46,7 +46,7 @@ def coordinate_descent(y, X, w, alpha, z, tolerance):
 
 
 def lasso(x, y, alpha=0.1, tol=0.0001):
-    w = np.zeros(X.shape[1], dtype="float32")
+    w = np.zeros(x.shape[1], dtype="float32")
     z = z_compute(x)
-    w_opt, iterations, max_step = coordinate_descent(y, x, w, alpha, z, tolerance)
+    w_opt, iterations, max_step = coordinate_descent(y, x, w, alpha, z, tol)
     return w_opt
