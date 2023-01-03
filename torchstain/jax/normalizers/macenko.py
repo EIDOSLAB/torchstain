@@ -14,45 +14,6 @@ class JaxMacenkoNormalizer(HENormalizer):
                           [0.4062, 0.5581]])
         self.maxCRef = jnp.array([1.9705, 1.0308])
 
-    def __convert_rgb2od(self, I, Io=240, beta=0.15):
-        # calculate optical density
-        OD = -jnp.log((I.astype(jnp.float32) + 1) / Io)
-
-        # remove transparent pixels
-        #ODhat = OD[~jnp.any(OD < beta, axis=1)]
-
-        # jax dont support dynamic shapes, but this: https://stackoverflow.com/a/71694754
-        # @FIXME: Not identical to numpy approach above!
-        mask = ~jnp.any(OD < beta, axis=1)
-        indices = jnp.where(mask, size=len(mask), fill_value=255)
-        ODhat = OD.at[indices].get()  # mode="fill", fill_value=0)
-
-        return OD, ODhat
-
-    def __find_HE(self, ODhat, eigvecs, alpha):
-        # project on the plane spanned by the eigenvectors corresponding to the two
-        # largest eigenvalues
-        That = ODhat.dot(eigvecs[:, 1:3])
-
-        phi = jnp.arctan2(That[:, 1], That[:, 0])
-
-        minPhi = jnp.percentile(phi, alpha)
-        maxPhi = jnp.percentile(phi, 100 - alpha)
-
-        vMin = eigvecs[:, 1:3].dot(jnp.array([(jnp.cos(minPhi), jnp.sin(minPhi))]).T)
-        vMax = eigvecs[:, 1:3].dot(jnp.array([(jnp.cos(maxPhi), jnp.sin(maxPhi))]).T)
-
-        # a heuristic to make the vector corresponding to hematoxylin first and the
-        # one corresponding to eosin second
-        HE = lax.cond(
-            vMin[0, 0] > vMax[0, 0],
-            lambda x: jnp.array((x[0], x[1])).T,
-            lambda x: jnp.array((x[0], x[1])).T,
-            (vMin[:, 0], vMax[:, 0])
-        )
-
-        return HE
-
     def __find_concentration(self, OD, HE):
         # rows correspond to channels (RGB), columns to OD values
         Y = jnp.reshape(OD, (-1, 3)).T
@@ -65,12 +26,35 @@ class JaxMacenkoNormalizer(HENormalizer):
     def __compute_matrices(self, I, Io, alpha, beta):
         I = I.reshape((-1, 3))
 
-        OD, ODhat = self.__convert_rgb2od(I, Io=Io, beta=beta)
+        # calculate optical density
+        OD = -jnp.log((I.astype(jnp.float32) + 1) / Io)
 
         # compute eigenvectors
-        _, eigvecs = jnp.linalg.eigh(jnp.cov(ODhat.T))
+        mask = ~jnp.any(OD < beta, axis=1)
+        cov = jnp.cov(OD.T, fweights=mask.astype(jnp.int32))
+        _, eigvecs = jnp.linalg.eigh(cov)
 
-        HE = self.__find_HE(ODhat, eigvecs, alpha)
+        Th = OD.dot(eigvecs[:, 1:3])
+
+        phi = jnp.arctan2(Th[:, 1], Th[:, 0])
+
+        phi = jnp.where(mask, phi, jnp.inf)
+        pvalid = mask.mean() # proportion that is valid and not masked
+
+        minPhi = jnp.percentile(phi, alpha * pvalid)
+        maxPhi = jnp.percentile(phi, (100 - alpha) * pvalid)
+
+        vMin = eigvecs[:, 1:3].dot(jnp.array([(jnp.cos(minPhi), jnp.sin(minPhi))]).T)
+        vMax = eigvecs[:, 1:3].dot(jnp.array([(jnp.cos(maxPhi), jnp.sin(maxPhi))]).T)
+
+        # a heuristic to make the vector corresponding to hematoxylin first and the
+        # one corresponding to eosin second
+        HE = lax.cond(
+            vMin[0, 0] > vMax[0, 0],
+            lambda x: jnp.array((x[0], x[1])).T,
+            lambda x: jnp.array((x[0], x[1])).T,
+            (vMin[:, 0], vMax[:, 0])
+        )
 
         C = self.__find_concentration(OD, HE)
 
@@ -102,7 +86,7 @@ class JaxMacenkoNormalizer(HENormalizer):
 
         H, E = None, None
 
-        if False:
+        if stains:
             # unmix hematoxylin and eosin
             H = jnp.multiply(Io, jnp.exp(jnp.expand_dims(-self.HERef[:, 0], axis=1).dot(jnp.expand_dims(C2[0, :], axis=0))))
             H = jnp.clip(H, 0, 255)
