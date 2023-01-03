@@ -1,6 +1,8 @@
 import jax
+from jax import lax
 from jax import numpy as jnp
 from torchstain.base.normalizers import HENormalizer
+from functools import partial
 
 
 class JaxMacenkoNormalizer(HENormalizer):
@@ -17,7 +19,13 @@ class JaxMacenkoNormalizer(HENormalizer):
         OD = -jnp.log((I.astype(jnp.float32) + 1) / Io)
 
         # remove transparent pixels
-        ODhat = OD[~jnp.any(OD < beta, axis=1)]
+        #ODhat = OD[~jnp.any(OD < beta, axis=1)]
+
+        # jax dont support dynamic shapes, but this: https://stackoverflow.com/a/71694754
+        # @FIXME: Not identical to numpy approach above!
+        mask = ~jnp.any(OD < beta, axis=1)
+        indices = jnp.where(mask, size=len(mask), fill_value=255)
+        ODhat = OD.at[indices].get()  # mode="fill", fill_value=0)
 
         return OD, ODhat
 
@@ -36,10 +44,12 @@ class JaxMacenkoNormalizer(HENormalizer):
 
         # a heuristic to make the vector corresponding to hematoxylin first and the
         # one corresponding to eosin second
-        if vMin[0] > vMax[0]:
-            HE = jnp.array((vMin[:, 0], vMax[:, 0])).T
-        else:
-            HE = jnp.array((vMax[:, 0], vMin[:, 0])).T
+        HE = lax.cond(
+            vMin[0, 0] > vMax[0, 0],
+            lambda x: jnp.array((x[0], x[1])).T,
+            lambda x: jnp.array((x[0], x[1])).T,
+            (vMin[:, 0], vMax[:, 0])
+        )
 
         return HE
 
@@ -75,9 +85,10 @@ class JaxMacenkoNormalizer(HENormalizer):
         self.HERef = HE
         self.maxCRef = maxC
 
+    @partial(jax.jit, static_argnums=(0,))
     def normalize(self, I, Io=240, alpha=1, beta=0.15, stains=True):
         h, w, c = I.shape
-        I = I.reshape((-1,3))
+        I = I.reshape((-1, 3))
 
         HE, C, maxC = self.__compute_matrices(I, Io, alpha, beta)
 
@@ -86,20 +97,19 @@ class JaxMacenkoNormalizer(HENormalizer):
 
         # recreate the image using reference mixing matrix
         Inorm = jnp.multiply(Io, jnp.exp(-self.HERef.dot(C2)))
-        Inorm.at[Inorm > 255].set(255)
+        Inorm = jnp.clip(Inorm, 0, 255)
         Inorm = jnp.reshape(Inorm.T, (h, w, c)).astype(jnp.uint8)
-
 
         H, E = None, None
 
-        if stains:
+        if False:
             # unmix hematoxylin and eosin
-            H = jnp.multiply(Io,jnp.exp(jnp.expand_dims(-self.HERef[:, 0], axis=1).dot(jnp.expand_dims(C2[0, :], axis=0))))
-            H.at[H > 255].set(255)
+            H = jnp.multiply(Io, jnp.exp(jnp.expand_dims(-self.HERef[:, 0], axis=1).dot(jnp.expand_dims(C2[0, :], axis=0))))
+            H = jnp.clip(H, 0, 255)
             H = jnp.reshape(H.T, (h, w, c)).astype(jnp.uint8)
 
             E = jnp.multiply(Io, jnp.exp(jnp.expand_dims(-self.HERef[:, 1], axis=1).dot(jnp.expand_dims(C2[1, :], axis=0))))
-            E.at[E > 255].set(255)
+            E = jnp.clip(E, 0, 255)
             E = jnp.reshape(E.T, (h, w, c)).astype(jnp.uint8)
 
         return Inorm, H, E
