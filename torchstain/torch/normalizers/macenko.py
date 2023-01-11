@@ -49,7 +49,7 @@ class TorchMacenkoNormalizer(HENormalizer):
         Y = OD.T
 
         # determine concentrations of the individual stains
-        return torch.lstsq(Y, HE)[0][:2]
+        return torch.linalg.lstsq(HE, Y)[0]
 
     def __compute_matrices(self, I, Io, alpha, beta):
         OD, ODhat = self.__convert_rgb2od(I, Io=Io, beta=beta)
