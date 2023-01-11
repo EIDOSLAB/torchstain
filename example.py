@@ -21,6 +21,8 @@ T = transforms.Compose([
 torch_normalizer = torchstain.normalizers.MacenkoNormalizer(backend='torch')
 torch_normalizer.fit(T(target))
 
+tf_normalizer = torchstain.normalizers.MacenkoNormalizer(backend='tensorflow')
+tf_normalizer.fit(T(target))
 
 t_to_transform = T(to_transform)
 
@@ -80,7 +82,7 @@ plt.show()
 
 t_ = time.time()
 print("tf runtime:", time.time() - t_)
-
+norm, H, E = tf_normalizer.normalize(I=t_to_transform, stains=True)
 plt.figure()
 plt.suptitle('tensorflow normalizer')
 plt.subplot(2, 2, 1)
