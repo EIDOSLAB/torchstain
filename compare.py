@@ -14,9 +14,8 @@ def measure(size, N):
     target = cv2.resize(cv2.cvtColor(cv2.imread("./data/target.png"), cv2.COLOR_BGR2RGB), (size, size))
     to_transform = cv2.resize(cv2.cvtColor(cv2.imread("./data/source.png"), cv2.COLOR_BGR2RGB), (size, size))
 
-    normalizer = torchstain.MacenkoNormalizer(backend='numpy')
+    normalizer = torchstain.normalizers.MacenkoNormalizer(backend='numpy')
     normalizer.fit(target)
-
 
     T = transforms.Compose([
         transforms.ToPILImage(),
@@ -24,14 +23,17 @@ def measure(size, N):
         transforms.Lambda(lambda x: x*255)
     ])
 
-    torch_normalizer = torchstain.MacenkoNormalizer(backend='torch')
+    torch_normalizer = torchstain.normalizers.MacenkoNormalizer(backend='torch')
     torch_normalizer.fit(T(target))
+
+    tf_normalizer = torchstain.normalizers.MacenkoNormalizer(backend='tensorflow')
+    tf_normalizer.fit(T(target))
 
     t_to_transform = T(to_transform)
 
     t_np = []
     start_np = time.perf_counter()
-    for i in range(N):
+    for _ in range(N):
         tic = time.perf_counter()
         _ = normalizer.normalize(to_transform)
         toc = time.perf_counter()
@@ -42,7 +44,7 @@ def measure(size, N):
 
     t_torch = []
     start_torch = time.perf_counter()
-    for i in range(N):
+    for _ in range(N):
         tic = time.perf_counter()
         _ = torch_normalizer.normalize(t_to_transform)
         toc = time.perf_counter()
@@ -50,18 +52,32 @@ def measure(size, N):
     end_torch = time.perf_counter()
     t_torch = np.array(t_torch)
 
+
+    t_tf = []
+    start_tf = time.perf_counter()
+    for _ in range(N):
+        tic = time.perf_counter()
+        _ = torch_normalizer.normalize(t_to_transform)
+        toc = time.perf_counter()
+        t_tf.append(toc-tic)
+    end_tf = time.perf_counter()
+    t_tf = np.array(t_tf)
+
     """
     print(f'Results of {N} runs:')
     print(f'numpy: {t_np.mean():.4f}s ± {t_np.std():.4f} (tot: {end_np-start_np:.4f}s)')
     print(f'torch: {t_torch.mean():.4f}s ± {t_torch.std():.4f} (tot: {end_torch-start_torch:.4f}s)')
     """
 
-    return t_np, end_np-start_np, t_torch, end_torch-start_torch
+    return t_np, end_np-start_np, t_torch, end_torch-start_torch, t_tf, end_tf-start_tf
 
 table = []
 for size in [224, 448, 672, 896, 1120, 1344, 1568, 1792]:
-    t_np, tot_np, t_torch, tot_torch = measure(size, N=10)
-    row = [size, f'{t_np.mean():.4f}s ± {t_np.std():.4f}', f'{tot_np:.4f}s', f'{t_torch.mean():.4f}s ± {t_torch.std():.4f}', f'{tot_torch:.4f}s']
+    t_np, tot_np, t_torch, tot_torch, t_tf, tot_tf = measure(size, N=10)
+    # row = [size, f'{t_np.mean():.4f}s ± {t_np.std():.4f}', f'{tot_np:.4f}s', f'{t_torch.mean():.4f}s ± {t_torch.std():.4f}', f'{tot_torch:.4f}s']
+    row = [size, f'{t_np.mean():.4f}s ± {t_np.std():.4f}', f'{t_torch.mean():.4f}s ± {t_torch.std():.4f}', f'{t_tf.mean():.4f}s ± {t_tf.std():.4f}']
     table.append(row)
 
-print(tabulate(table, headers=['size', 'numpy avg. time', 'numpy tot. time', 'torch avg. time', 'torch tot. time'], tablefmt='github'))
+# print(tabulate(table, headers=['size', 'numpy avg. time', 'numpy tot. time', 'torch avg. time', 'torch tot. time'], tablefmt='github'))
+print(tabulate(table, headers=['size', 'numpy avg. time', 'torch avg. time', 'tf avg. time'], tablefmt='github'))
+
