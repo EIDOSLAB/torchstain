@@ -83,7 +83,6 @@ plt.show()
 t_ = time.time()
 norm, H, E = tf_normalizer.normalize(I=t_to_transform, stains=True)
 print("tf runtime:", time.time() - t_)
-
 plt.figure()
 plt.suptitle('tensorflow normalizer')
 plt.subplot(2, 2, 1)
