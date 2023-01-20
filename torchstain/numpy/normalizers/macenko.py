@@ -16,7 +16,7 @@ class NumpyMacenkoNormalizer(HENormalizer):
 
     def __convert_rgb2od(self, I, Io=240, beta=0.15):
         # calculate optical density
-        OD = -np.log((I.astype(np.float)+1)/Io)
+        OD = -np.log((I.astype(float)+1)/Io)
 
         # remove transparent pixels
         ODhat = OD[~np.any(OD < beta, axis=1)]

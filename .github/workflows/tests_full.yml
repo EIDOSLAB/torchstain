@@ -73,7 +73,7 @@ jobs:
       matrix:
         os: [ windows-2019, ubuntu-18.04, macos-11 ]
         python-version: [ 3.6, 3.7, 3.8, 3.9 ]
-        pytorch-version: [1.8.0, 1.9.0, 1.10.0, 1.11.0, 1.12.0]
+        pytorch-version: [1.8.0, 1.9.0, 1.10.0, 1.11.0, 1.12.0, 1.13.0]
         exclude:
           - python-version: 3.6
             pytorch-version: 1.11.0

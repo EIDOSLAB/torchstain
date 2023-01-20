@@ -1,13 +1,13 @@
-import tensorflow as tf
+import torch
 
 def csplit(I):
-    return [I[..., i] for i in range(I.shape[-1])]
+    return [I[i] for i in range(I.shape[0])]
 
 def cmerge(I1, I2, I3):
-    return tf.stack([I1, I2, I3], axis=-1)
+    return torch.stack([I1, I2, I3], dim=0)
 
 def lab_split(I):
-    I = tf.cast(I, tf.float32)
+    I = I.type(torch.float32)
     I1, I2, I3 = csplit(I)
     return I1 / 2.55, I2 - 128, I3 - 128
 
