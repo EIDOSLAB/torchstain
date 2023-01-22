@@ -100,7 +100,7 @@ class JaxMacenkoNormalizer(HENormalizer):
     def _tree_flatten(self):
         children = ()  # arrays / dynamic values
         aux = ()  # static values
-        return (), ()
+        return children, aux
 
     @classmethod
     def _tree_unflatten(cls, aux, children):
