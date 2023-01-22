@@ -2,16 +2,15 @@ import jax
 from jax import lax
 from jax import numpy as jnp
 from torchstain.base.normalizers import HENormalizer
-from functools import partial
-
+from jax import tree_util
 
 class JaxMacenkoNormalizer(HENormalizer):
     def __init__(self):
         super().__init__()
 
         self.HERef = jnp.array([[0.5626, 0.2159],
-                          [0.7201, 0.8012],
-                          [0.4062, 0.5581]])
+                                [0.7201, 0.8012],
+                                [0.4062, 0.5581]])
         self.maxCRef = jnp.array([1.9705, 1.0308])
 
     def __find_concentration(self, OD, HE):
@@ -55,7 +54,6 @@ class JaxMacenkoNormalizer(HENormalizer):
             lambda x: jnp.array((x[0], x[1])).T,
             (vMin[:, 0], vMax[:, 0])
         )
-
         C = self.__find_concentration(OD, HE)
 
         # normalize stain concentrations
@@ -63,13 +61,14 @@ class JaxMacenkoNormalizer(HENormalizer):
 
         return HE, C, maxC
 
+    @jax.jit
     def fit(self, I, Io=240, alpha=1, beta=0.15):
         HE, _, maxC = self.__compute_matrices(I, Io, alpha, beta)
 
         self.HERef = HE
         self.maxCRef = maxC
 
-    @partial(jax.jit, static_argnums=(0,))
+    @jax.jit
     def normalize(self, I, Io=240, alpha=1, beta=0.15, stains=True):
         h, w, c = I.shape
         I = I.reshape((-1, 3))
@@ -97,3 +96,16 @@ class JaxMacenkoNormalizer(HENormalizer):
             E = jnp.reshape(E.T, (h, w, c)).astype(jnp.uint8)
 
         return Inorm, H, E
+    
+    def _tree_flatten(self):
+        children = ()  # arrays / dynamic values
+        aux = ()  # static values
+        return (), ()
+
+    @classmethod
+    def _tree_unflatten(cls, aux, children):
+        return cls(*children, *aux)
+
+tree_util.register_pytree_node(
+    JaxMacenkoNormalizer, JaxMacenkoNormalizer._tree_flatten,JaxMacenkoNormalizer._tree_unflatten
+)
