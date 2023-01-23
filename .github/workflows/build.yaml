@@ -1,7 +1,9 @@
 name: Build and upload to PyPI
 
 on:
-  push
+  push:
+    branches:
+      - main
 
 jobs:
   build_wheels:

@@ -84,3 +84,29 @@ jobs:
 
       - name: Run tests
         run: pytest -vs tests/test_torch.py
+
+
+  test-jax:
+    needs: build
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Download artifact
+        uses: actions/download-artifact@master
+        with:
+          name: "Python wheel"
+
+      - name: Install dependencies
+        run: pip install jax jaxlib opencv-python-headless scikit-image pytest
+
+      - name: Install wheel
+        run: pip install --find-links=${{github.workspace}} torchstain
+
+      - name: Run tests
+        run: pytest -vs tests/test_jax.py

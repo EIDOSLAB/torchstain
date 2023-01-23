@@ -3,7 +3,7 @@ name: tests
 on:
   push:
     branches:
-      - "*"
+      - main
   pull_request:
     branches:
       - main
@@ -124,9 +124,7 @@ jobs:
           name: "Python wheel"
 
       - name: Install dependencies
-        run: |
-          pip install jax opencv-python-headless scikit-image
-          pip install pytest
+        run: pip install jax jaxlib opencv-python-headless scikit-image pytest
 
       - name: Install wheel
         run: pip install --find-links=${{github.workspace}} torchstain
