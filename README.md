@@ -8,9 +8,11 @@
 GPU-accelerated stain normalization tools for histopathological images. Compatible with PyTorch, TensorFlow, and Numpy.
 Normalization algorithms currently implemented:
 
-- Macenko [\[1\]](#reference) (ported from [numpy implementation](https://github.com/schaugf/HEnorm_python))
-- Reinhard [\[2\]](#reference)
-- Modified Reinhard [\[3\]](#reference)
+| Algorithm | numpy | torch | tensorflow |
+|-|-|-|-|
+| Macenko [\[1\]](#reference) | &check; | &check; | &check; |
+| Reinhard [\[2\]](#reference) | &check; | &check; | &check; |
+| Modified Reinhard [\[3\]](#reference) | &check; | &check; | &check; |
 
 ## Installation
 
@@ -44,14 +46,6 @@ norm, H, E = normalizer.normalize(I=t_to_transform, stains=True)
 ```
 
 ![alt text](data/result.png)
-
-## Implemented algorithms
-
-| Algorithm | numpy | torch | tensorflow |
-|-|-|-|-|
-| Macenko | &check; | &check; | &check; |
-| Reinhard | &check; | &check; | &check; |
-| Modified Reinhard | &check; | &check; | &check; |
 
 ## Backend comparison
 
