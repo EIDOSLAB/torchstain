@@ -49,7 +49,7 @@ norm, H, E = normalizer.normalize(I=t_to_transform, stains=True)
 
 ## Backend comparison
 
-Results with 10 runs per size on a Intel(R) Core(TM) i5-8365U CPU @ 1.60GHz
+Macenko runtime results using different backends with 10 runs per image size on a Intel(R) Core(TM) i5-8365U CPU @ 1.60GHz.
 
 |   size | numpy avg. time   | torch avg. time   | tf avg. time     |
 |--------|-------------------|-------------------|------------------|
@@ -66,7 +66,7 @@ Results with 10 runs per size on a Intel(R) Core(TM) i5-8365U CPU @ 1.60GHz
 
 - [1] Macenko, Marc et al. "A method for normalizing histology slides for quantitative analysis." 2009 IEEE International Symposium on Biomedical Imaging: From Nano to Macro. IEEE, 2009.
 - [2] Reinhard, Erik et al. "Color transfer between images." IEEE Computer Graphics and Applications. IEEE, 2001.
-- [3] Roy, Santanu et al. "Modified Reinhard Algorithm for Color Normalization of Colorectal Cancer Histopathology Images". 2021 29th European Signal Processing Conference (EUSIPCO), IEEE, 2021.
+- [3] Roy, Santanu et al. "Modified Reinhard Algorithm for Color Normalization of Colorectal Cancer Histopathology Images". 2021 29th European Signal Processing Conference (EUSIPCO). IEEE, 2021.
 
 ## Citing
 
@@ -74,8 +74,7 @@ If you find this software useful for your research, please cite it as:
 
 ```bibtex
 @software{barbano2022torchstain,
-  author       = {Carlo Alberto Barbano and
-                  André Pedersen},
+  author       = {Carlo Alberto Barbano and André Pedersen},
   title        = {EIDOSLAB/torchstain: v1.2.0-stable},
   month        = aug,
   year         = 2022,
