@@ -4,7 +4,6 @@ from torchstain.tf.utils import cov, percentile, solveLS
 import numpy as np
 import tensorflow.keras.backend as K
 
-
 """
 Source code ported from: https://github.com/schaugf/HEnorm_python
 Original implementation: https://github.com/mitkovetta/staining-normalization
@@ -14,8 +13,8 @@ class TensorFlowMacenkoNormalizer(HENormalizer):
         super().__init__()
 
         self.HERef = tf.constant([[0.5626, 0.2159],
-                                   [0.7201, 0.8012],
-                                   [0.4062, 0.5581]])
+                                  [0.7201, 0.8012],
+                                  [0.4062, 0.5581]])
         self.maxCRef = tf.constant([1.9705, 1.0308])
 
     def __convert_rgb2od(self, I, Io, beta):
@@ -78,7 +77,7 @@ class TensorFlowMacenkoNormalizer(HENormalizer):
         ''' Normalize staining appearence of H&E stained images
 
         Example use:
-            see test.py
+            see example.py
 
         Input:
             I: RGB input image: tensor of shape [C, H, W] and type uint8

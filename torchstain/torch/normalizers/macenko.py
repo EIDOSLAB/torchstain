@@ -20,7 +20,7 @@ class TorchMacenkoNormalizer(HENormalizer):
         I = I.permute(1, 2, 0)
 
         # calculate optical density
-        OD = -torch.log((I.reshape((-1, I.shape[-1])).float() + 1)/Io)
+        OD = -torch.log((I.reshape((-1, I.shape[-1])).float() + 1) / Io)
 
         # remove transparent pixels
         ODhat = OD[~torch.any(OD < beta, dim=1)]
@@ -79,7 +79,7 @@ class TorchMacenkoNormalizer(HENormalizer):
         ''' Normalize staining appearence of H&E stained images
 
         Example use:
-            see test.py
+            see example.py
 
         Input:
             I: RGB input image: tensor of shape [C, H, W] and type uint8

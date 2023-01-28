@@ -5,7 +5,6 @@ import torch
 from torchvision import transforms
 import time
 
-
 size = 1024
 target = cv2.resize(cv2.cvtColor(cv2.imread("./data/target.png"), cv2.COLOR_BGR2RGB), (size, size))
 to_transform = cv2.resize(cv2.cvtColor(cv2.imread("./data/source.png"), cv2.COLOR_BGR2RGB), (size, size))
