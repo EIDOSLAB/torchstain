@@ -5,7 +5,7 @@
 [![Pip Downloads](https://img.shields.io/pypi/dm/torchstain?label=pip%20downloads&logo=python)](https://pypi.org/project/torchstain/)
 [![DOI](https://zenodo.org/badge/323590093.svg)](https://zenodo.org/badge/latestdoi/323590093)
 
-GPU-accelerated stain normalization tools for histopathological images. Compatible with PyTorch, TensorFlow, and Numpy.
+GPU-accelerated stain normalization tools for histopathological images. Compatible with PyTorch, TensorFlow, Numpy, and JAX.
 Normalization algorithms currently implemented:
 
 - Macenko [\[1\]](#reference) (ported from [numpy implementation](https://github.com/schaugf/HEnorm_python))
@@ -47,11 +47,11 @@ norm, H, E = normalizer.normalize(I=t_to_transform, stains=True)
 
 ## Implemented algorithms
 
-| Algorithm | numpy | torch | tensorflow |
-|-|-|-|-|
-| Macenko | &check; | &check; | &check; |
-| Reinhard | &check; | &check; | &check; |
-| Modified Reinhard | &check; | &check; | &check; |
+| Algorithm | numpy | torch | tensorflow | jax |
+|-|-|-|-|-|
+| Macenko | &check; | &check; | &check; | &check; |
+| Reinhard | &check; | &check; | &check; | &cross; |
+| Modified Reinhard | &check; | &check; | &check; | &cross; |
 
 ## Backend comparison
 
