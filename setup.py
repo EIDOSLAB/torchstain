@@ -22,6 +22,7 @@ setup(
     extras_require={
         "tf": ["tensorflow"],
         "torch": ["torch"],
+        "jax": ["jax", "jaxlib"],
     },
     classifiers=[
         'Development Status :: 4 - Beta',
