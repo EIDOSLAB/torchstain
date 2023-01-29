@@ -13,20 +13,16 @@ def test_macenko_jax():
     target = cv2.resize(cv2.cvtColor(cv2.imread(os.path.join(curr_file_path, "../data/target.png")), cv2.COLOR_BGR2RGB), (size, size))
     to_transform = cv2.resize(cv2.cvtColor(cv2.imread(os.path.join(curr_file_path, "../data/source.png")), cv2.COLOR_BGR2RGB), (size, size))
 
-    # setup preprocessing and preprocess image to be normalized
-    T = lambda x: jnp.array(np.moveaxis(x, -1, 0).astype("float32"))
-    t_to_transform = T(to_transform)
-
     # initialize normalizers for each backend and fit to target image
     normalizer = torchstain.normalizers.MacenkoNormalizer(backend='numpy')
     normalizer.fit(target)
 
     jax_normalizer = torchstain.normalizers.MacenkoNormalizer(backend='jax')
-    jax_normalizer.fit(T(target))
+    jax_normalizer.fit(target)
 
     # transform
     result_numpy, _, _ = normalizer.normalize(I=to_transform)
-    result_jax, _, _ = jax_normalizer.normalize(I=t_to_transform)
+    result_jax, _, _ = jax_normalizer.normalize(I=to_transform)
 
     # convert to numpy and set dtype
     result_numpy = result_numpy.astype("float32")
