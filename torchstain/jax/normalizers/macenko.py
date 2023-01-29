@@ -10,9 +10,10 @@ class JaxMacenkoNormalizer(HENormalizer):
 
         self.HERef = jnp.array([[0.5626, 0.2159],
                                 [0.7201, 0.8012],
-                                [0.4062, 0.5581]])
-        self.maxCRef = jnp.array([1.9705, 1.0308])
+                                [0.4062, 0.5581]], dtype=jnp.float32)
+        self.maxCRef = jnp.array([1.9705, 1.0308], dtype=jnp.float32)
 
+    @jax.jit
     def __find_concentration(self, OD, HE):
         # rows correspond to channels (RGB), columns to OD values
         Y = jnp.reshape(OD, (-1, 3)).T
@@ -22,14 +23,14 @@ class JaxMacenkoNormalizer(HENormalizer):
 
         return C
 
+    @jax.jit
     def __compute_matrices(self, I, Io, alpha, beta):
         I = I.reshape((-1, 3))
 
         # calculate optical density
         OD = -jnp.log((I.astype(jnp.float32) + 1) / Io)
-
-        # compute eigenvectors
-        mask = ~jnp.any(OD < beta, axis=1)
+        
+        mask = ~jnp.any(OD < beta, axis=1)  # to remove transparent pixels
         cov = jnp.cov(OD.T, fweights=mask.astype(jnp.int32))
         _, eigvecs = jnp.linalg.eigh(cov)
 
@@ -51,7 +52,7 @@ class JaxMacenkoNormalizer(HENormalizer):
         HE = lax.cond(
             vMin[0, 0] > vMax[0, 0],
             lambda x: jnp.array((x[0], x[1])).T,
-            lambda x: jnp.array((x[0], x[1])).T,
+            lambda x: jnp.array((x[1], x[0])).T,
             (vMin[:, 0], vMax[:, 0])
         )
         C = self.__find_concentration(OD, HE)
@@ -61,14 +62,14 @@ class JaxMacenkoNormalizer(HENormalizer):
 
         return HE, C, maxC
 
-    @jax.jit
+    #@jax.jit
     def fit(self, I, Io=240, alpha=1, beta=0.15):
         HE, _, maxC = self.__compute_matrices(I, Io, alpha, beta)
 
         self.HERef = HE
         self.maxCRef = maxC
 
-    @jax.jit
+    #@jax.jit
     def normalize(self, I, Io=240, alpha=1, beta=0.15, stains=True):
         h, w, c = I.shape
         I = I.reshape((-1, 3))
