@@ -8,5 +8,8 @@ def MacenkoNormalizer(backend='torch'):
     elif backend == "tensorflow":
         from torchstain.tf.normalizers.macenko import TensorFlowMacenkoNormalizer
         return TensorFlowMacenkoNormalizer()
+    elif backend == "jax":
+        from torchstain.jax.normalizers.macenko import JaxMacenkoNormalizer
+        return JaxMacenkoNormalizer()
     else:
         raise Exception(f'Unknown backend {backend}')

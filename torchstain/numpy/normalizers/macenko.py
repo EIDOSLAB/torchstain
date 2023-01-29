@@ -10,13 +10,13 @@ class NumpyMacenkoNormalizer(HENormalizer):
         super().__init__()
 
         self.HERef = np.array([[0.5626, 0.2159],
-                          [0.7201, 0.8012],
-                          [0.4062, 0.5581]])
+                               [0.7201, 0.8012],
+                               [0.4062, 0.5581]])
         self.maxCRef = np.array([1.9705, 1.0308])
 
     def __convert_rgb2od(self, I, Io=240, beta=0.15):
         # calculate optical density
-        OD = -np.log((I.astype(float)+1)/Io)
+        OD = -np.log((I.astype(np.float32)+1)/Io)
 
         # remove transparent pixels
         ODhat = OD[~np.any(OD < beta, axis=1)]

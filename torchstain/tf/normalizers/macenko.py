@@ -1,7 +1,6 @@
 import tensorflow as tf
 from torchstain.base.normalizers.he_normalizer import HENormalizer
 from torchstain.tf.utils import cov, percentile, solveLS
-import numpy as np
 import tensorflow.keras.backend as K
 
 
