@@ -88,14 +88,14 @@ jobs:
 
   test-jax:
     needs: build
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v1
-      - name: Set up Python 3.8
+      - name: Set up Python 3.7
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.7
 
       - name: Download artifact
         uses: actions/download-artifact@master
