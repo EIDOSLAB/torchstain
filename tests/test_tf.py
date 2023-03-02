@@ -3,8 +3,6 @@ import cv2
 import torchstain
 import torchstain.tf
 import tensorflow as tf
-import time
-from skimage.metrics import structural_similarity as ssim
 import numpy as np
 
 def test_cov():
@@ -44,11 +42,11 @@ def test_macenko_tf():
     result_tf, _, _ = tf_normalizer.normalize(I=t_to_transform, stains=True)
 
     # convert to numpy and set dtype
-    result_numpy = result_numpy.astype("float32")
-    result_tf = result_tf.numpy().astype("float32")
+    result_numpy = result_numpy.astype("float32") / 255.
+    result_tf = result_tf.numpy().astype("float32") / 255.
 
     # assess whether the normalized images are identical across backends
-    np.testing.assert_almost_equal(ssim(result_numpy.flatten(), result_tf.flatten()), 1.0, decimal=4, verbose=True)
+    np.testing.assert_almost_equal(result_numpy.flatten(), result_tf.flatten(), decimal=2, verbose=True)
 
 def test_reinhard_tf():
     size = 1024
@@ -72,8 +70,8 @@ def test_reinhard_tf():
     result_tf = tf_normalizer.normalize(I=t_to_transform)
 
     # convert to numpy and set dtype
-    result_numpy = result_numpy.astype("float32")
-    result_tf = result_tf.numpy().astype("float32")
+    result_numpy = result_numpy.astype("float32") / 255.
+    result_tf = result_tf.numpy().astype("float32") / 255.
 
     # assess whether the normalized images are identical across backends
-    np.testing.assert_almost_equal(ssim(result_numpy.flatten(), result_tf.flatten()), 1.0, decimal=4, verbose=True)
+    np.testing.assert_almost_equal(result_numpy.flatten(), result_tf.flatten(), decimal=2, verbose=True)
