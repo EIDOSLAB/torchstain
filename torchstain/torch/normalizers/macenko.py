@@ -15,6 +15,9 @@ class TorchMacenkoNormalizer(HENormalizer):
                                    [0.4062, 0.5581]])
         self.maxCRef = torch.tensor([1.9705, 1.0308])
 
+        # Avoid using deprecated torch.lstsq (since 1.9.0)
+        self.updated_lstsq = hasattr(torch.linalg, 'lstsq')
+        
     def __convert_rgb2od(self, I, Io, beta):
         I = I.permute(1, 2, 0)
 
@@ -49,13 +52,16 @@ class TorchMacenkoNormalizer(HENormalizer):
         Y = OD.T
 
         # determine concentrations of the individual stains
-        return torch.lstsq(Y, HE)[0][:2]
+        if not self.updated_lstsq:
+            return torch.lstsq(Y, HE)[0][:2]
+    
+        return torch.linalg.lstsq(HE, Y)[0]
 
     def __compute_matrices(self, I, Io, alpha, beta):
         OD, ODhat = self.__convert_rgb2od(I, Io=Io, beta=beta)
 
         # compute eigenvectors
-        _, eigvecs = torch.symeig(cov(ODhat.T), eigenvectors=True)
+        _, eigvecs = torch.linalg.eigh(cov(ODhat.T)) 
         eigvecs = eigvecs[:, [1, 2]]
 
         HE = self.__find_HE(ODhat, eigvecs, alpha)
