@@ -25,7 +25,9 @@ class NumpyReinhardNormalizer(HENormalizer):
         lab = rgb2lab(target)
 
         # get summary statistics
-        stack_ = np.apply_along_axis(get_mean_std, 1, lab_split(lab))
+#         stack_ = np.apply_along_axis(get_mean_std, 1, lab_split(lab))
+        stack_ = np.apply_along_axis(get_mean_std, axis=1, arr=lab_split(lab))
+        
         self.target_means = stack_[:, 0]
         self.target_stds = stack_[:, 1]
 
@@ -38,7 +40,9 @@ class NumpyReinhardNormalizer(HENormalizer):
         labs = lab_split(lab)
 
         # get summary statistics from LAB
-        stack_ = np.apply_along_axis(get_mean_std, 1, labs)
+#         stack_ = np.apply_along_axis(get_mean_std, 1, labs)
+        stack_ = np.apply_along_axis(get_mean_std, axis=1, arr=labs)
+        
         mus = stack_[:, 0]
         stds = stack_[:, 1]
 
