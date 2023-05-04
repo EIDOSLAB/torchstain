@@ -25,3 +25,4 @@ If applicable, add screenshots to help explain your problem.
 **Desktop (please complete the following information):**
  - OS: [e.g. Ubuntu, Windows, macOS]
  - Version [e.g. 20.04, 10, Catalina]
+ 
