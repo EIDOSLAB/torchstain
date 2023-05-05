@@ -14,7 +14,9 @@ class TorchMacenkoNormalizer(HENormalizer):
                                    [0.7201, 0.8012],
                                    [0.4062, 0.5581]])
         self.maxCRef = torch.tensor([1.9705, 1.0308])
-        self.deprecated_torch = torch.__version__ < (1,9,0)
+
+        # Avoid using deprecated torch.lstsq (since 1.9.0)
+        self.updated_lstsq = hasattr(torch.linalg, 'lstsq')
         
     def __convert_rgb2od(self, I, Io, beta):
         I = I.permute(1, 2, 0)
@@ -50,7 +52,7 @@ class TorchMacenkoNormalizer(HENormalizer):
         Y = OD.T
 
         # determine concentrations of the individual stains
-        if self.deprecated_torch:
+        if not self.updated_lstsq:
             return torch.lstsq(Y, HE)[0][:2]
     
         return torch.linalg.lstsq(HE, Y)[0]

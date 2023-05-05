@@ -4,10 +4,9 @@ import torchstain
 import torchstain.torch
 import torch
 import torchvision
-import time
 import numpy as np
 from torchvision import transforms
-from skimage.metrics import structural_similarity as ssim
+
 
 def setup_function(fn):
     print("torch version:", torch.__version__, "torchvision version:", torchvision.__version__)
@@ -52,11 +51,11 @@ def test_macenko_torch():
     result_torch, _, _ = torch_normalizer.normalize(I=t_to_transform, stains=True)
 
     # convert to numpy and set dtype
-    result_numpy = result_numpy.astype("float32")
-    result_torch = result_torch.numpy().astype("float32")
+    result_numpy = result_numpy.astype("float32") / 255.
+    result_torch = result_torch.numpy().astype("float32") / 255.
 
     # assess whether the normalized images are identical across backends
-    np.testing.assert_almost_equal(ssim(result_numpy.flatten(), result_torch.flatten()), 1.0, decimal=4, verbose=True)
+    np.testing.assert_almost_equal(result_numpy.flatten(), result_torch.flatten(), decimal=2, verbose=True)
 
 def test_reinhard_torch():
     size = 1024
@@ -83,8 +82,9 @@ def test_reinhard_torch():
     result_torch = torch_normalizer.normalize(I=t_to_transform)
 
     # convert to numpy and set dtype
-    result_numpy = result_numpy.astype("float32")
-    result_torch = result_torch.numpy().astype("float32")
+    result_numpy = result_numpy.astype("float32") / 255.
+    result_torch = result_torch.numpy().astype("float32") / 255.
 
+    
     # assess whether the normalized images are identical across backends
-    np.testing.assert_almost_equal(ssim(result_numpy.flatten(), result_torch.flatten()), 1.0, decimal=4, verbose=True)
+    np.testing.assert_almost_equal(result_numpy.flatten(), result_torch.flatten(), decimal=2, verbose=True)
