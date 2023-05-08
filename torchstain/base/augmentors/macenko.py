@@ -3,7 +3,8 @@ def MacenkoAugmentor(backend='torch'):
         from torchstain.numpy.augmentors import NumpyMacenkoAugmentor
         return NumpyMacenkoAugmentor()
     elif backend == "torch":
-        raise NotImplementedError()
+        from torchstain.torch.augmentors import TorchMacenkoAugmentor
+        return TorchMacenkoAugmentor()
     elif backend == "tensorflow":
         from torchstain.tf.augmentors import TensorFlowMacenkoAugmentor
         return TensorFlowMacenkoAugmentor()

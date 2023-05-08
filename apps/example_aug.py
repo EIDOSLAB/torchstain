@@ -26,6 +26,9 @@ augmentor.fit(to_transform)
 tf_augmentor = torchstain.augmentors.MacenkoAugmentor(backend='tensorflow')
 tf_augmentor.fit(t_to_transform)
 
+torch_augmentor = torchstain.augmentors.MacenkoAugmentor(backend='torch')
+torch_augmentor.fit(t_to_transform)
+
 
 print("NUMPY" + "-"*20)
 
@@ -61,6 +64,28 @@ plt.imshow(to_transform)
 for i in range(16):
     # generate augmented sample
     result = tf_augmentor.augment()
+
+    plt.subplot(4, 4, i + 1)
+    if i == 1:
+        plt.title('Augmented ->')
+    plt.axis('off')
+    plt.imshow(result)
+
+plt.show()
+
+
+print("Torch" + "-"*20)
+
+plt.figure()
+plt.suptitle('torch augmentor')
+plt.subplot(4, 4, 1)
+plt.title('Original')
+plt.axis('off')
+plt.imshow(to_transform)
+
+for i in range(16):
+    # generate augmented sample
+    result = torch_augmentor.augment()
 
     plt.subplot(4, 4, i + 1)
     if i == 1:
