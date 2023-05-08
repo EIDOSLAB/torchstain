@@ -21,7 +21,7 @@ class NumpyMacenkoAugmentor(HEAugmentor):
 
     def __convert_rgb2od(self, I, Io=240, beta=0.15):
         # calculate optical density
-        OD = -np.log((I.astype(float)+1)/Io)
+        OD = -np.log((I.astype(float) + 1) / Io)
 
         # remove transparent pixels
         ODhat = OD[~np.any(OD < beta, axis=1)]
@@ -97,11 +97,8 @@ class NumpyMacenkoAugmentor(HEAugmentor):
 
         # introduce noise to the concentrations
         for i in range(C2.shape[0]):
-            alpha = np.random.uniform(1 - self.sigma1, 1 + self.sigma1)
-            beta = np.random.uniform(-self.sigma2, self.sigma2)
-
-            C2[i, :] *= alpha
-            C2[i, :] += beta
+            C2[i, :] *= np.random.uniform(1 - self.sigma1, 1 + self.sigma1)  # multiplicative
+            C2[i, :] += np.random.uniform(-self.sigma2, self.sigma2)  # additative
 
         # recreate the image using reference mixing matrix
         Iaug = np.multiply(Io, np.exp(-self.HERef.dot(C2)))

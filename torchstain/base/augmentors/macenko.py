@@ -5,6 +5,7 @@ def MacenkoAugmentor(backend='torch'):
     elif backend == "torch":
         raise NotImplementedError()
     elif backend == "tensorflow":
-        raise NotImplementedError()
+        from torchstain.tf.augmentors import TensorFlowMacenkoAugmentor
+        return TensorFlowMacenkoAugmentor()
     else:
         raise Exception(f'Unknown backend {backend}')
