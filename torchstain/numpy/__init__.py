@@ -1,1 +1,1 @@
-from torchstain.numpy import normalizers, utils
+from torchstain.numpy import augmentors, normalizers, utils

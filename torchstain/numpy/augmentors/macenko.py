@@ -1,13 +1,18 @@
 import numpy as np
-from torchstain.base.normalizers import HENormalizer
+from torchstain.base.augmentors import HEAugmentor
 
 """
 Source code adapted from: https://github.com/schaugf/HEnorm_python
 Original implementation: https://github.com/mitkovetta/staining-normalization
 """
-class NumpyMacenkoNormalizer(HENormalizer):
-    def __init__(self):
+class NumpyMacenkoAugmentor(HEAugmentor):
+    def __init__(self, sigma1=0.2, sigma2=0.2):
         super().__init__()
+
+        self.sigma1 = sigma1
+        self.sigma2 = sigma2
+
+        self.I = None
 
         self.HERef = np.array([[0.5626, 0.2159],
                                [0.7201, 0.8012],
@@ -33,8 +38,8 @@ class NumpyMacenkoNormalizer(HENormalizer):
         minPhi = np.percentile(phi, alpha)
         maxPhi = np.percentile(phi, 100-alpha)
 
-        vMin = eigvecs[:,1:3].dot(np.array([(np.cos(minPhi), np.sin(minPhi))]).T)
-        vMax = eigvecs[:,1:3].dot(np.array([(np.cos(maxPhi), np.sin(maxPhi))]).T)
+        vMin = eigvecs[:, 1:3].dot(np.array([(np.cos(minPhi), np.sin(minPhi))]).T)
+        vMax = eigvecs[:, 1:3].dot(np.array([(np.cos(maxPhi), np.sin(maxPhi))]).T)
 
         # a heuristic to make the vector corresponding to hematoxylin first and the
         # one corresponding to eosin second
@@ -55,7 +60,7 @@ class NumpyMacenkoNormalizer(HENormalizer):
         return C
 
     def __compute_matrices(self, I, Io, alpha, beta):
-        I = I.reshape((-1,3))
+        I = I.reshape((-1, 3))
 
         OD, ODhat = self.__convert_rgb2od(I, Io=Io, beta=beta)
 
@@ -67,58 +72,40 @@ class NumpyMacenkoNormalizer(HENormalizer):
         C = self.__find_concentration(OD, HE)
 
         # normalize stain concentrations
-        maxC = np.array([np.percentile(C[0,:], 99), np.percentile(C[1,:],99)])
+        maxC = np.array([np.percentile(C[0,:], 99), np.percentile(C[1,:], 99)])
 
         return HE, C, maxC
 
     def fit(self, I, Io=240, alpha=1, beta=0.15):
-        HE, _, maxC = self.__compute_matrices(I, Io, alpha, beta)
+        HE, C, maxC = self.__compute_matrices(I, Io, alpha, beta)
 
+        # keep these as we will use them for augmentation
+        self.I = I
         self.HERef = HE
+        self.CRef = C
         self.maxCRef = maxC
-
-    def normalize(self, I, Io=240, alpha=1, beta=0.15, stains=True):
-        ''' Normalize staining appearence of H&E stained images
-
-        Example use:
-            see test.py
-
-        Input:
-            I: RGB input image
-            Io: (optional) transmitted light intensity
-
-        Output:
-            Inorm: normalized image
-            H: hematoxylin image
-            E: eosin image
-
-        Reference:
-            A method for normalizing histology slides for quantitative analysis. M.
-            Macenko et al., ISBI 2009
-        '''
+    
+    def augment(self, Io=240, alpha=1, beta=0.15):
+        I = self.I
         h, w, c = I.shape
-        I = I.reshape((-1,3))
+        I = I.reshape((-1, 3))
 
         HE, C, maxC = self.__compute_matrices(I, Io, alpha, beta)
 
         maxC = np.divide(maxC, self.maxCRef)
         C2 = np.divide(C, maxC[:, np.newaxis])
 
+        # introduce noise to the concentrations
+        for i in range(C2.shape[0]):
+            alpha = np.random.uniform(1 - self.sigma1, 1 + self.sigma1)
+            beta = np.random.uniform(-self.sigma2, self.sigma2)
+
+            C2[i, :] *= alpha
+            C2[i, :] += beta
+
         # recreate the image using reference mixing matrix
-        Inorm = np.multiply(Io, np.exp(-self.HERef.dot(C2)))
-        Inorm[Inorm > 255] = 255
-        Inorm = np.reshape(Inorm.T, (h, w, c)).astype(np.uint8)
+        Iaug = np.multiply(Io, np.exp(-self.HERef.dot(C2)))
+        Iaug[Iaug > 255] = 255
+        Iaug = np.reshape(Iaug.T, (h, w, c)).astype(np.uint8)
 
-        H, E = None, None
-
-        if stains:
-            # unmix hematoxylin and eosin
-            H = np.multiply(Io, np.exp(np.expand_dims(-self.HERef[:,0], axis=1).dot(np.expand_dims(C2[0,:], axis=0))))
-            H[H > 255] = 255
-            H = np.reshape(H.T, (h, w, c)).astype(np.uint8)
-
-            E = np.multiply(Io, np.exp(np.expand_dims(-self.HERef[:,1], axis=1).dot(np.expand_dims(C2[1,:], axis=0))))
-            E[E > 255] = 255
-            E = np.reshape(E.T, (h, w, c)).astype(np.uint8)
-
-        return Inorm, H, E
+        return Iaug
