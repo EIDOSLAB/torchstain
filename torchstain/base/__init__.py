@@ -1,1 +1,1 @@
-from torchstain.base import normalizers
+from torchstain.base import augmentors, normalizers
