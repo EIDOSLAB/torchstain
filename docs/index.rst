@@ -22,6 +22,12 @@ You may also install directly from GitHub, using the following command:
 
 ``pip install git+https://github.com/EIDOSLAB/torchstain``
 
+.. toctree::
+   :glob:
+   :caption: Examples
+   :maxdepth: 2
+
+   examples/*
 
 .. toctree::
    :caption: API Documentation
