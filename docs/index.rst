@@ -40,7 +40,7 @@ Support
 -------
 
 If you are having issues, please let us know by filing an issue on our
-`issue tracker <https://github.com/EIDOSLAB/torchstain/blob/main/LICENSEissues>`_.
+`issue tracker <https://github.com/EIDOSLAB/torchstain/issues>`_.
 
 
 License
