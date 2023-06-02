@@ -2,11 +2,17 @@
 
 ### Build
 
-Docs can be built by running the commands:
+First install requirements for building docs:
+```
+python -m pip install -r docs/requirements.txt
+```
+
+Docs can then be built running the commands:
 
 ```
 cd docs/
-python -m sphinx -T -E -b html -d _build/doctrees -D language=en . html
+sphinx-apidoc -f -o src/ ../torchstain
+make html
 ```
 
 ### Usage

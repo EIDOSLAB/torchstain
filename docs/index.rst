@@ -11,7 +11,7 @@ Installation
 ------------
 
 The latest release of TorchStain can be installed from
-`PyPI <https://pypi.org/project/torchstain/>`_ using
+`PyPI <https://pypi.org/project/torchstain/>`_ by:
 
 ``pip install torchstain``
 
@@ -22,39 +22,18 @@ You may also install directly from GitHub, using the following command:
 
 ``pip install git+https://github.com/EIDOSLAB/torchstain``
 
-.. toctree::
-   :glob:
-   :caption: Background
-   :maxdepth: 2
-
-   background/*
-
-.. toctree::
-   :glob:
-   :caption: Examples
-   :maxdepth: 2
-
-   examples/*
-
-.. toctree::
-   :glob:
-   :caption: Frequently Asked Questions
-   :maxdepth: 2
-
-   faq/*
-
 
 .. toctree::
    :caption: API Documentation
-   :maxdepth: 2
+   :maxdepth: 10
 
-   api
+    src/modules
 
 The Team
 --------
 
-The development of TorchStain is led by researchers at [EIDOSLAB](https://eidos.di.unito.it/)
-and [SINTEF MIA](https://www.sintef.no/en/expertise/sintef-technology-and-society/medical-technology/).
+The development of TorchStain is led by researchers at `EIDOSLAB <https://eidos.di.unito.it/>`_
+and `SINTEF MIA <https://www.sintef.no/en/expertise/sintef-technology-and-society/medical-technology/>`_.
 We are also very grateful to the open source community for contributing ideas, bug fixes, and issues.
 
 Support

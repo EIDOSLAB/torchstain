@@ -5,7 +5,10 @@ import os
 import subprocess
 import sys
 
-import gradient_accumulator
+import torchstain
+
+
+sys.path.insert(0, os.path.abspath('..'))
 
 
 # Project information
@@ -18,28 +21,27 @@ master_doc = 'index'
 extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
     'sphinx.ext.linkcode',
 ]
+
+# Generate autosummary
+autosummary_generate = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['templates']
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files
-exclude_patterns = ['build']
+exclude_patterns = ['templates']
 
-# Options for the intersphinx extension
-intersphinx_mapping = {
-    'python': ('https://docs.python.org/3', None),
-}
+# numpy style docs with Napoleon
+napoleon_google_docstring = False
+napoleon_use_param = False
+napoleon_use_ivar = True
 
 # Draw graphs in the SVG format instead of the default PNG format
 graphviz_output_format = 'svg'
-
-# Generate autosummary
-autosummary_generate = True
 
 # sphinx.ext.linkcode: Try to link to source code on GitHub
 REVISION_CMD = ['git', 'rev-parse', '--short', 'HEAD']
@@ -70,11 +72,11 @@ def linkcode_resolve(domain, info):
             obj = obj.__wrapped__
 
     file = inspect.getsourcefile(obj)
-    package_dir = os.path.dirname(gradient_accumulator.__file__)
+    package_dir = os.path.dirname(torchstain.__file__)
     if file is None or os.path.commonpath([file, package_dir]) != package_dir:
         return None
     file = os.path.relpath(file, start=package_dir)
     source, line_start = inspect.getsourcelines(obj)
     line_end = line_start + len(source) - 1
-    filename = f'src/gradient_accumulator/{file}#L{line_start}-L{line_end}'
+    filename = f'src/torchstain/{file}#L{line_start}-L{line_end}'
     return f'{url}/blob/{_git_revision}/{filename}'
