@@ -25,7 +25,7 @@ def rgb2lab(rgb):
     mask = arr > 0.008856
     not_mask = torch.logical_not(mask)
     arr.masked_scatter_(mask, torch.pow(torch.masked_select(arr, mask), 1 / 3))
-    arr.masked_scatter_(not_mask, 7.787 * torch.masked_select(arr, not_mask) + 16 / 166)
+    arr.masked_scatter_(not_mask, 7.787 * torch.masked_select(arr, not_mask) + 16 / 116)
 
     # get each channel as individual tensors
     x, y, z = arr[0], arr[1], arr[2]
