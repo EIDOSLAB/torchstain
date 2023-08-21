@@ -56,12 +56,10 @@ jobs:
           name: "Python wheel"
 
       - name: Install dependencies
-        run: |
-          pip install tensorflow==${{ matrix.tf-version }} protobuf==3.20.* opencv-python-headless scikit-image
-          pip install pytest
+        run: pip install tensorflow==${{ matrix.tf-version }} protobuf==3.20.* opencv-python-headless scikit-image pytest
 
       - name: Install wheel
-        run: pip install --find-links=${{github.workspace}} torchstain
+        run: pip install --find-links=${{github.workspace}} torchstain-*
         shell: bash
 
       - name: Run tests
@@ -96,12 +94,10 @@ jobs:
           name: "Python wheel"
 
       - name: Install dependencies
-        run: |
-          pip install torch==${{ matrix.pytorch-version }} torchvision opencv-python-headless scikit-image
-          pip install pytest
+        run: pip install torch==${{ matrix.pytorch-version }} torchvision opencv-python-headless scikit-image pytest
 
       - name: Install wheel
-        run: pip install --find-links=${{github.workspace}} torchstain
+        run: pip install --find-links=${{github.workspace}} torchstain-*
         shell: bash
 
       - name: Run tests
