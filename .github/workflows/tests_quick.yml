@@ -54,6 +54,7 @@ jobs:
 
       - name: Install wheel
         run: pip install --find-links=${{github.workspace}} torchstain
+        shell: bash
 
       - name: Run tests
         run: pytest -vs tests/test_tf.py
@@ -81,6 +82,7 @@ jobs:
 
       - name: Install wheel
         run: pip install --find-links=${{github.workspace}} torchstain
+        shell: bash
 
       - name: Run tests
         run: pytest -vs tests/test_torch.py
