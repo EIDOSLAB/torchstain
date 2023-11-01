@@ -1,35 +1,40 @@
 import numpy as np
-
-# constant conversion matrices between color spaces: https://gist.github.com/bikz05/6fd21c812ef6ebac66e1
-_rgb2xyz = np.array([[0.412453, 0.357580, 0.180423],
-                     [0.212671, 0.715160, 0.072169],
-                     [0.019334, 0.119193, 0.950227]])
+from colour.models import illuminants
 
 """
 Implementation adapted from:
 https://gist.github.com/bikz05/6fd21c812ef6ebac66e1
 https://github.com/scikit-image/scikit-image/blob/00177e14097237ef20ed3141ed454bc81b308f82/skimage/color/colorconv.py#L704
 """
+
+_rgb2xyz = np.array([[0.412453, 0.357580, 0.180423],
+                     [0.212671, 0.715160, 0.072169],
+                     [0.019334, 0.119193, 0.950227]])
+
 def rgb2lab(rgb):
-    rgb = rgb.astype("float32")
+    """
+    Convert RGB color space to CIELAB color space.
+
+    :param rgb: numpy array of shape (n, 3) containing RGB values in the range [0, 255]
+    :return: numpy array of shape (n, 3) containing LAB values
+    """
+    rgb = rgb.astype("float32") / 255.0
 
     # convert rgb -> xyz color domain
-    arr = rgb.copy()
-    mask = arr > 0.04045
-    arr[mask] = np.power((arr[mask] + 0.055) / 1.055, 2.4)
-    arr[~mask] /= 12.92
-    xyz = np.dot(arr, _rgb2xyz.T.astype(arr.dtype))
+    mask = rgb > 0.04045
+    rgb[mask] = np.power((rgb[mask] + 0.055) / 1.055, 2.4)
+    rgb[~mask] /= 12.92
+    xyz = np.dot(rgb, _rgb2xyz.T.astype(rgb.dtype))
 
     # scale by CIE XYZ tristimulus values of the reference white point
-    arr = xyz.copy()
-    arr = arr / np.asarray((0.95047, 1., 1.08883), dtype=xyz.dtype)
+    xyz = xyz / illuminants.illuminant_D65()[np.newaxis, :]
 
     # Nonlinear distortion and linear transformation
-    mask = arr > 0.008856
-    arr[mask] = np.cbrt(arr[mask])
-    arr[~mask] = 7.787 * arr[~mask] + 16. / 116.
+    mask = xyz > 0.008856
+    xyz[mask] = np.cbrt(xyz[mask])
+    xyz[~mask] = 7.787 * xyz[~mask] + 16. / 116.
 
-    x, y, z = arr[..., 0], arr[..., 1], arr[..., 2]
+    x, y, z = xyz[..., 0], xyz[..., 1], xyz[..., 2]
 
     # Vector scaling
     L = (116. * y) - 16.
