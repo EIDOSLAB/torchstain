@@ -60,7 +60,7 @@ class NumpyMacenkoAugmentor(HEAugmentor):
         return C
 
     def __compute_matrices(self, I, Io, alpha, beta):
-        I = I.reshape((-1, 3)).T
+        I = I.reshape((-1, 3))
 
         OD, ODhat = self.__convert_rgb2od(I, Io=Io, beta=beta)
 
