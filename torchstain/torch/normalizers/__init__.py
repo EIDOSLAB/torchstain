@@ -1,2 +1,3 @@
 from torchstain.torch.normalizers.macenko import TorchMacenkoNormalizer
+from torchstain.torch.normalizers.multitarget import MultiMacenkoNormalizer
 from torchstain.torch.normalizers.reinhard import TorchReinhardNormalizer
