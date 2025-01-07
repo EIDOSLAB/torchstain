@@ -4,7 +4,7 @@ from torchstain.torch.utils import cov, percentile
 Implementation of the multi-target normalizer from the paper: https://arxiv.org/pdf/2406.02077
 """
 class MultiMacenkoNormalizer:
-    def __init__(self, norm_mode='avg-after'):
+    def __init__(self, norm_mode='avg-post'):
         self.norm_mode = norm_mode
         self.HERef = torch.tensor([[0.5626, 0.2159],
                                    [0.7201, 0.8012],
