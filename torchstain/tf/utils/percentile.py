@@ -7,7 +7,7 @@ def percentile(t: tf.Tensor, q: float) -> Union[int, float]:
 
     CAUTION:
      * Values are not interpolated, which corresponds to
-       ``numpy.percentile(..., method="nearest")``.
+       ``numpy.percentile(..., interpolation="nearest")``.
 
     :param t: Input tensor.
     :param q: Percentile to compute, which must be between 0 and 100 inclusive.
