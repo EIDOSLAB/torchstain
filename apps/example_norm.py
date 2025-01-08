@@ -6,7 +6,6 @@ from torchvision import transforms
 import time
 import os
 
-
 size = 1024
 dir_path = os.path.dirname(os.path.abspath(__file__))
 target = cv2.resize(cv2.cvtColor(cv2.imread(dir_path + "/../data/target.png"), cv2.COLOR_BGR2RGB), (size, size))
