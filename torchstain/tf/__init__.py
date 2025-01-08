@@ -1,1 +1,1 @@
-from torchstain.tf import normalizers, utils
+from torchstain.tf import augmentors, normalizers, utils
