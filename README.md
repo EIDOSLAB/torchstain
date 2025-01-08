@@ -5,12 +5,16 @@
 [![Pip Downloads](https://img.shields.io/pypi/dm/torchstain?label=pip%20downloads&logo=python)](https://pypi.org/project/torchstain/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7692014.svg)](https://doi.org/10.5281/zenodo.7692014)
 
-GPU-accelerated stain normalization tools for histopathological images. Compatible with PyTorch, TensorFlow, and Numpy.
-Normalization algorithms currently implemented:
+GPU-accelerated stain tools for histopathological images. Compatible with PyTorch, TensorFlow, and Numpy.
 
+Normalization algorithms currently implemented:
 - Macenko [\[1\]](#reference) (ported from [numpy implementation](https://github.com/schaugf/HEnorm_python))
 - Reinhard [\[2\]](#reference)
 - Modified Reinhard [\[3\]](#reference)
+- Multi-target Macenko [\[4\]](#reference)
+
+Augmentation algorithms currently implemented:
+- Macenko-Aug [\[1\]](#reference) (inspired by [StainTools](https://github.com/Peter554/StainTools))
 
 ## Installation
 
@@ -52,10 +56,12 @@ norm, H, E = normalizer.normalize(I=t_to_transform, stains=True)
 | Macenko | &check; | &check; | &check; |
 | Reinhard | &check; | &check; | &check; |
 | Modified Reinhard | &check; | &check; | &check; |
+| Multi-target Macenko | &cross; | &check; | &cross; |
+| Macenko-Aug | &check; | &check; | &check; |
 
 ## Backend comparison
 
-Results with 10 runs per size on a Intel(R) Core(TM) i5-8365U CPU @ 1.60GHz
+Runtimes using the Macenko algorithm using different backends. Metrics were calculated from 10 repeated runs for each quadratic image size on an Intel(R) Core(TM) i5-8365U CPU @ 1.60GHz.
 
 |   size | numpy avg. time   | torch avg. time   | tf avg. time     |
 |--------|-------------------|-------------------|------------------|
@@ -73,6 +79,7 @@ Results with 10 runs per size on a Intel(R) Core(TM) i5-8365U CPU @ 1.60GHz
 - [1] Macenko, Marc et al. "A method for normalizing histology slides for quantitative analysis." 2009 IEEE International Symposium on Biomedical Imaging: From Nano to Macro. IEEE, 2009.
 - [2] Reinhard, Erik et al. "Color transfer between images." IEEE Computer Graphics and Applications. IEEE, 2001.
 - [3] Roy, Santanu et al. "Modified Reinhard Algorithm for Color Normalization of Colorectal Cancer Histopathology Images". 2021 29th European Signal Processing Conference (EUSIPCO), IEEE, 2021.
+- [4] Ivanov, Desislav et al. "Multi-target stain normalization for histology slides". arXiv (preprint). 2024.
 
 ## Citing
 
