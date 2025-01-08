@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![tests](https://github.com/EIDOSLAB/torchstain/workflows/tests/badge.svg)](https://github.com/EIDOSLAB/torchstain/actions)
 [![Pip Downloads](https://img.shields.io/pypi/dm/torchstain?label=pip%20downloads&logo=python)](https://pypi.org/project/torchstain/)
-[![DOI](https://zenodo.org/badge/323590093.svg)](https://zenodo.org/badge/latestdoi/323590093)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7692014.svg)](https://doi.org/10.5281/zenodo.7692014)
 
 GPU-accelerated stain normalization tools for histopathological images. Compatible with PyTorch, TensorFlow, and Numpy.
 Normalization algorithms currently implemented:
@@ -38,8 +38,8 @@ T = transforms.Compose([
     transforms.Lambda(lambda x: x*255)
 ])
 
-torch_normalizer = torchstain.normalizers.MacenkoNormalizer(backend='torch')
-torch_normalizer.fit(T(target))
+normalizer = torchstain.normalizers.MacenkoNormalizer(backend='torch')
+normalizer.fit(T(target))
 
 t_to_transform = T(to_transform)
 norm, H, E = normalizer.normalize(I=t_to_transform, stains=True)

@@ -15,8 +15,7 @@ jobs:
           python-version: '3.x'
 
       - name: Install deps
-        run: |
-          pip install setuptools wheel
+        run: pip install setuptools wheel
 
       - name: Build wheels
         run: python setup.py sdist bdist_wheel
@@ -37,7 +36,7 @@ jobs:
           name: artifact
           path: dist
       
-      - uses: pypa/gh-action-pypi-publish@v1.5.0
+      - uses: pypa/gh-action-pypi-publish@release/v1.12
         with:
           user: __token__
           password: ${{ secrets.torchstain_deploy_token }}
