@@ -11,7 +11,7 @@ def percentile(t: torch.Tensor, q: float) -> Union[int, float]:
     CAUTION:
      * Needs PyTorch >= 1.1.0, as ``torch.kthvalue()`` is used.
      * Values are not interpolated, which corresponds to
-       ``numpy.percentile(..., interpolation="nearest")``.
+       ``numpy.percentile(..., method="nearest")``.
 
     :param t: Input tensor.
     :param q: Percentile to compute, which must be between 0 and 100 inclusive.
