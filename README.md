@@ -79,7 +79,7 @@ Runtimes using the Macenko algorithm using different backends. Metrics were calc
 - [1] Macenko, Marc et al. "A method for normalizing histology slides for quantitative analysis." 2009 IEEE International Symposium on Biomedical Imaging: From Nano to Macro. IEEE, 2009.
 - [2] Reinhard, Erik et al. "Color transfer between images." IEEE Computer Graphics and Applications. IEEE, 2001.
 - [3] Roy, Santanu et al. "Modified Reinhard Algorithm for Color Normalization of Colorectal Cancer Histopathology Images". 2021 29th European Signal Processing Conference (EUSIPCO), IEEE, 2021.
-- [4] Ivanov, Desislav et al. "Multi-target stain normalization for histology slides". arXiv (preprint). 2024.
+- [4] Ivanov, Desislav et al. "Multi-target stain normalization for histology slides". 2nd International Workshop on Medical Optical Imaging and Virtual Microscopy Image Analysis (MOVI 2024), MICCAI. 2024.
 
 ## Citing
 
