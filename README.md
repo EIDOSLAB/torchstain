@@ -1,7 +1,7 @@
 # torchstain
 
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![tests](https://github.com/EIDOSLAB/torchstain/workflows/tests/badge.svg)](https://github.com/EIDOSLAB/torchstain/actions)
+[![Full Tests](https://github.com/EIDOSLAB/torchstain/actions/workflows/tests_full.yml/badge.svg)](https://github.com/EIDOSLAB/torchstain/actions/workflows/tests_full.yml)
 [![Pip Downloads](https://img.shields.io/pypi/dm/torchstain?label=pip%20downloads&logo=python)](https://pypi.org/project/torchstain/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7692014.svg)](https://doi.org/10.5281/zenodo.7692014)
 
