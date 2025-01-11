@@ -1,16 +1,17 @@
 import torch
 from torchstain.torch.utils import cov, percentile
+
 """
 Implementation of the multi-target normalizer from the paper: https://arxiv.org/pdf/2406.02077
 """
-class MultiMacenkoNormalizer:
-    def __init__(self, norm_mode='avg-post'):
+class TorchMultiMacenkoNormalizer:
+    def __init__(self, norm_mode="avg-post"):
         self.norm_mode = norm_mode
         self.HERef = torch.tensor([[0.5626, 0.2159],
                                    [0.7201, 0.8012],
                                    [0.4062, 0.5581]])
         self.maxCRef = torch.tensor([1.9705, 1.0308])
-        self.updated_lstsq = hasattr(torch.linalg, 'lstsq')
+        self.updated_lstsq = hasattr(torch.linalg, "lstsq")
         
     def __convert_rgb2od(self, I, Io, beta):
         I = I.permute(1, 2, 0)
@@ -59,7 +60,7 @@ class MultiMacenkoNormalizer:
         return HE, C, maxC
 
     def fit(self, Is, Io=240, alpha=1, beta=0.15):
-        if self.norm_mode == 'avg-post':
+        if self.norm_mode == "avg-post":
             HEs, _, maxCs = zip(*(
                 self.__compute_matrices_single(I, Io, alpha, beta)
                 for I in Is
@@ -67,7 +68,7 @@ class MultiMacenkoNormalizer:
 
             self.HERef = torch.stack(HEs).mean(dim=0)
             self.maxCRef = torch.stack(maxCs).mean(dim=0)
-        elif self.norm_mode == 'concat':
+        elif self.norm_mode == "concat":
             ODs, ODhats = zip(*(
                 self.__convert_rgb2od(I, Io, beta)
                 for I in Is
@@ -83,7 +84,7 @@ class MultiMacenkoNormalizer:
             maxCs = torch.stack([percentile(C[0, :], 99), percentile(C[1, :], 99)])
             self.HERef = HE
             self.maxCRef = maxCs
-        elif self.norm_mode == 'avg-pre':
+        elif self.norm_mode == "avg-pre":
             ODs, ODhats = zip(*(
                 self.__convert_rgb2od(I, Io, beta)
                 for I in Is
@@ -100,7 +101,7 @@ class MultiMacenkoNormalizer:
             maxCs = torch.stack([percentile(C[0, :], 99), percentile(C[1, :], 99)])
             self.HERef = HE
             self.maxCRef = maxCs
-        elif self.norm_mode == 'fixed-single' or self.norm_mode == 'stochastic-single':
+        elif self.norm_mode == "fixed-single" or self.norm_mode == "stochastic-single":
             # single img
             self.HERef, _, self.maxCRef = self.__compute_matrices_single(Is[0], Io, alpha, beta)
         else:
