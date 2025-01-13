@@ -1,7 +1,7 @@
 # torchstain
 
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![tests](https://github.com/EIDOSLAB/torchstain/workflows/tests/badge.svg)](https://github.com/EIDOSLAB/torchstain/actions)
+[![Full Tests](https://github.com/EIDOSLAB/torchstain/actions/workflows/tests_full.yml/badge.svg)](https://github.com/EIDOSLAB/torchstain/actions/workflows/tests_full.yml)
 [![Pip Downloads](https://img.shields.io/pypi/dm/torchstain?label=pip%20downloads&logo=python)](https://pypi.org/project/torchstain/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7692014.svg)](https://doi.org/10.5281/zenodo.7692014)
 
@@ -79,7 +79,7 @@ Runtimes using the Macenko algorithm using different backends. Metrics were calc
 - [1] Macenko, Marc et al. "A method for normalizing histology slides for quantitative analysis." 2009 IEEE International Symposium on Biomedical Imaging: From Nano to Macro. IEEE, 2009.
 - [2] Reinhard, Erik et al. "Color transfer between images." IEEE Computer Graphics and Applications. IEEE, 2001.
 - [3] Roy, Santanu et al. "Modified Reinhard Algorithm for Color Normalization of Colorectal Cancer Histopathology Images". 2021 29th European Signal Processing Conference (EUSIPCO), IEEE, 2021.
-- [4] Ivanov, Desislav et al. "Multi-target stain normalization for histology slides". arXiv (preprint). 2024.
+- [4] Ivanov, Desislav et al. "Multi-target stain normalization for histology slides". 2nd International Workshop on Medical Optical Imaging and Virtual Microscopy Image Analysis (MOVI 2024), MICCAI. 2024.
 
 ## Citing
 
