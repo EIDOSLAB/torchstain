@@ -49,7 +49,8 @@ class TorchMultiMacenkoNormalizer:
     def __compute_matrices_single(self, I, Io, alpha, beta):
         OD, ODhat = self.__convert_rgb2od(I, Io=Io, beta=beta)
 
-        _, eigvecs = torch.symeig(cov(ODhat.T), eigenvectors=True)
+        # _, eigvecs = torch.symeig(cov(ODhat.T), eigenvectors=True)
+        _, eigvecs = torch.linalg.eigh(cov(ODhat.T), UPLO='U')
         eigvecs = eigvecs[:, [1, 2]]
 
         HE = self.__find_HE(ODhat, eigvecs, alpha)
