@@ -11,12 +11,14 @@ from torchvision import transforms
 def setup_function(fn):
     print("torch version:", torch.__version__, "torchvision version:", torchvision.__version__)
 
+
 def test_cov():
     x = np.random.randn(10, 10)
     cov_np = np.cov(x)
     cov_t = torchstain.torch.utils.cov(torch.tensor(x))
 
     np.testing.assert_almost_equal(cov_np, cov_t.numpy())
+
 
 def test_percentile():
     x = np.random.randn(10, 10)
@@ -25,6 +27,7 @@ def test_percentile():
     p_t = torchstain.torch.utils.percentile(torch.tensor(x), p)
 
     np.testing.assert_almost_equal(p_np, p_t)
+
 
 def test_macenko_torch():
     size = 1024
@@ -56,6 +59,7 @@ def test_macenko_torch():
 
     # assess whether the normalized images are identical across backends
     np.testing.assert_almost_equal(result_numpy.flatten(), result_torch.flatten(), decimal=2, verbose=True)
+
 
 def test_multitarget_macenko_torch():
     size = 1024
