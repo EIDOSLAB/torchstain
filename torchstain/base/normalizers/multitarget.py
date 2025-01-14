@@ -1,10 +1,12 @@
 def MultiMacenkoNormalizer(backend="torch", **kwargs):
     if backend == "numpy":
-        raise NotImplementedError("MultiMacenkoNormalizer is not implemented for NumPy backend")
+        from torchstain.numpy.normalizers import NumpyMultiMacenkoNormalizer
+        return NumpyMultiMacenkoNormalizer(**kwargs)
     elif backend == "torch":
         from torchstain.torch.normalizers import TorchMultiMacenkoNormalizer
         return TorchMultiMacenkoNormalizer(**kwargs)
     elif backend == "tensorflow":
-        raise NotImplementedError("MultiMacenkoNormalizer is not implemented for TensorFlow backend")
+        from torchstain.tf.normalizers import TensorFlowMultiMacenkoNormalizer
+        return TensorFlowMultiMacenkoNormalizer(**kwargs)
     else:
         raise Exception(f"Unsupported backend {backend}")
