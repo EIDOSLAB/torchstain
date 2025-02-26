@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "torchstain"
+version = "1.4.1"
+description = "Stain normalization tools for histological analysis and computational pathology"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Carlo Alberto Barbano" },
+    { name = "André Pedersen" },
+]
+maintainers = [
+    { name = "EIDOSlab", email = "eidoslab@di.unito.it" }
+]
+requires-python = ">=3.6"
+dependencies = [
+    "numpy",
+]
+
+[project.optional-dependencies]
+tf = ["tensorflow"]
+torch = ["torch"]
+
+[project.urls]
+Homepage = "https://github.com/EIDOSlab/torchstain"
+
+[tool.setuptools]
+packages = ["torchstain"]
