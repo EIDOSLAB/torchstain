@@ -1,4 +1,3 @@
-from torchstain.torch.utils.cov import cov
 from torchstain.torch.utils.percentile import percentile
 from torchstain.torch.utils.stats import *
 from torchstain.torch.utils.split import *

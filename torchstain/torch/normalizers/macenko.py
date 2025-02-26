@@ -1,6 +1,6 @@
 import torch
 from torchstain.base.normalizers.he_normalizer import HENormalizer
-from torchstain.torch.utils import cov, percentile
+from torchstain.torch.utils import percentile
 
 """
 Source code ported from: https://github.com/schaugf/HEnorm_python
@@ -61,7 +61,7 @@ class TorchMacenkoNormalizer(HENormalizer):
         OD, ODhat = self.__convert_rgb2od(I, Io=Io, beta=beta)
 
         # compute eigenvectors
-        _, eigvecs = torch.linalg.eigh(cov(ODhat.T)) 
+        _, eigvecs = torch.linalg.eigh(torch.cov(ODhat.T)) 
         eigvecs = eigvecs[:, [1, 2]]
 
         HE = self.__find_HE(ODhat, eigvecs, alpha)
