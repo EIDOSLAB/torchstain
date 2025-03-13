@@ -6,8 +6,6 @@ from torchstain.torch.utils import cov, percentile
 Source code ported from: https://github.com/schaugf/HEnorm_python
 Original implementation: https://github.com/mitkovetta/staining-normalization
 """
-
-
 class TorchMacenkoAugmentor(HEAugmentor):
     def __init__(self, sigma1=0.2, sigma2=0.2, device="cpu"):
         super().__init__()
@@ -116,5 +114,6 @@ class TorchMacenkoAugmentor(HEAugmentor):
         Inorm = Io * torch.exp(-torch.matmul(self.HERef, C2))
         Inorm[Inorm > 255] = 255
         Inorm = Inorm.T.reshape(h, w, c).int()
+
 
         return Inorm
