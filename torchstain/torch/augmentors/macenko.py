@@ -115,5 +115,4 @@ class TorchMacenkoAugmentor(HEAugmentor):
         Inorm[Inorm > 255] = 255
         Inorm = Inorm.T.reshape(h, w, c).int()
 
-
         return Inorm
