@@ -1,12 +1,15 @@
-def MacenkoNormalizer(backend='torch'):
-    if backend == 'numpy':
+def MacenkoNormalizer(backend="torch", device="cpu"):
+    if backend == "numpy":
         from torchstain.numpy.normalizers import NumpyMacenkoNormalizer
+
         return NumpyMacenkoNormalizer()
     elif backend == "torch":
         from torchstain.torch.normalizers.macenko import TorchMacenkoNormalizer
-        return TorchMacenkoNormalizer()
+
+        return TorchMacenkoNormalizer(device=device)
     elif backend == "tensorflow":
         from torchstain.tf.normalizers.macenko import TensorFlowMacenkoNormalizer
+
         return TensorFlowMacenkoNormalizer()
     else:
-        raise Exception(f'Unknown backend {backend}')
+        raise Exception(f"Unknown backend {backend}")
