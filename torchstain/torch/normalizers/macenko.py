@@ -6,18 +6,22 @@ from torchstain.torch.utils import cov, percentile
 Source code ported from: https://github.com/schaugf/HEnorm_python
 Original implementation: https://github.com/mitkovetta/staining-normalization
 """
+
+
 class TorchMacenkoNormalizer(HENormalizer):
-    def __init__(self):
+    def __init__(self, device="cpu"):
         super().__init__()
 
-        self.HERef = torch.tensor([[0.5626, 0.2159],
-                                   [0.7201, 0.8012],
-                                   [0.4062, 0.5581]])
-        self.maxCRef = torch.tensor([1.9705, 1.0308])
+        self.device = device
+
+        self.HERef = torch.tensor(
+            [[0.5626, 0.2159], [0.7201, 0.8012], [0.4062, 0.5581]], device=self.device
+        )
+        self.maxCRef = torch.tensor([1.9705, 1.0308], device=self.device)
 
         # Avoid using deprecated torch.lstsq (since 1.9.0)
-        self.updated_lstsq = hasattr(torch.linalg, 'lstsq')
-        
+        self.updated_lstsq = hasattr(torch.linalg, "lstsq")
+
     def __convert_rgb2od(self, I, Io, beta):
         I = I.permute(1, 2, 0)
 
@@ -38,12 +42,20 @@ class TorchMacenkoNormalizer(HENormalizer):
         minPhi = percentile(phi, alpha)
         maxPhi = percentile(phi, 100 - alpha)
 
-        vMin = torch.matmul(eigvecs, torch.stack((torch.cos(minPhi), torch.sin(minPhi)))).unsqueeze(1)
-        vMax = torch.matmul(eigvecs, torch.stack((torch.cos(maxPhi), torch.sin(maxPhi)))).unsqueeze(1)
+        vMin = torch.matmul(
+            eigvecs, torch.stack((torch.cos(minPhi), torch.sin(minPhi)))
+        ).unsqueeze(1)
+        vMax = torch.matmul(
+            eigvecs, torch.stack((torch.cos(maxPhi), torch.sin(maxPhi)))
+        ).unsqueeze(1)
 
         # a heuristic to make the vector corresponding to hematoxylin first and the
         # one corresponding to eosin second
-        HE = torch.where(vMin[0] > vMax[0], torch.cat((vMin, vMax), dim=1), torch.cat((vMax, vMin), dim=1))
+        HE = torch.where(
+            vMin[0] > vMax[0],
+            torch.cat((vMin, vMax), dim=1),
+            torch.cat((vMax, vMin), dim=1),
+        )
 
         return HE
 
@@ -54,14 +66,16 @@ class TorchMacenkoNormalizer(HENormalizer):
         # determine concentrations of the individual stains
         if not self.updated_lstsq:
             return torch.lstsq(Y, HE)[0][:2]
-    
-        return torch.linalg.lstsq(HE, Y)[0]
+
+        return torch.linalg.pinv(HE) @ OD.T
+        # this fails for large Y dimension HE.shape torch.Size([3, 2]) Y.shape torch.Size([3, 1048576])
+        # torch.linalg.lstsq(HE, Y)[0]
 
     def __compute_matrices(self, I, Io, alpha, beta):
         OD, ODhat = self.__convert_rgb2od(I, Io=Io, beta=beta)
 
         # compute eigenvectors
-        _, eigvecs = torch.linalg.eigh(cov(ODhat.T)) 
+        _, eigvecs = torch.linalg.eigh(cov(ODhat.T))
         eigvecs = eigvecs[:, [1, 2]]
 
         HE = self.__find_HE(ODhat, eigvecs, alpha)
@@ -72,13 +86,16 @@ class TorchMacenkoNormalizer(HENormalizer):
         return HE, C, maxC
 
     def fit(self, I, Io=240, alpha=1, beta=0.15):
+
+        I = I.to(self.device)
+
         HE, _, maxC = self.__compute_matrices(I, Io, alpha, beta)
 
         self.HERef = HE
         self.maxCRef = maxC
 
     def normalize(self, I, Io=240, alpha=1, beta=0.15, stains=True):
-        ''' Normalize staining appearence of H&E stained images
+        """Normalize staining appearence of H&E stained images
 
         Example use:
             see example.py
@@ -98,7 +115,10 @@ class TorchMacenkoNormalizer(HENormalizer):
         Reference:
             A method for normalizing histology slides for quantitative analysis. M.
             Macenko et al., ISBI 2009
-        '''
+        """
+
+        I = I.to(self.device)
+
         c, h, w = I.shape
 
         HE, C, maxC = self.__compute_matrices(I, Io, alpha, beta)
@@ -114,11 +134,21 @@ class TorchMacenkoNormalizer(HENormalizer):
         H, E = None, None
 
         if stains:
-            H = torch.mul(Io, torch.exp(torch.matmul(-self.HERef[:, 0].unsqueeze(-1), C[0, :].unsqueeze(0))))
+            H = torch.mul(
+                Io,
+                torch.exp(
+                    torch.matmul(-self.HERef[:, 0].unsqueeze(-1), C[0, :].unsqueeze(0))
+                ),
+            )
             H[H > 255] = 255
             H = H.T.reshape(h, w, c).int()
 
-            E = torch.mul(Io, torch.exp(torch.matmul(-self.HERef[:, 1].unsqueeze(-1), C[1, :].unsqueeze(0))))
+            E = torch.mul(
+                Io,
+                torch.exp(
+                    torch.matmul(-self.HERef[:, 1].unsqueeze(-1), C[1, :].unsqueeze(0))
+                ),
+            )
             E[E > 255] = 255
             E = E.T.reshape(h, w, c).int()
 
