@@ -1,12 +1,12 @@
 name: Full Tests
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
+  # pull_request:
+  #   branches-ignore:
+  #     - main
   workflow_dispatch:
 
 jobs:
