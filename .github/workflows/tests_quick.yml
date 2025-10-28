@@ -1,23 +1,23 @@
 name: Quick Tests
 
-on:
-  push:
-    branches-ignore:
-      - main
-  pull_request:
-    branches-ignore:
-      - main
-  workflow_dispatch:
+on: [push, pull_request, workflow_dispatch]
+  # push:
+    #branches-ignore:
+    #  - main
+  # pull_request:
+    #branches-ignore:
+    #  - main
+  # workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python 3.6
+      - name: Set up Python 3.8
         uses: actions/setup-python@v4
         with:
-          python-version: 3.6
+          python-version: 3.8
 
       - name: Install dependencies
         run: pip install wheel setuptools
@@ -34,7 +34,7 @@ jobs:
 
   test-tf:
     needs: build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4
@@ -60,7 +60,7 @@ jobs:
 
   test-torch:
     needs: build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4

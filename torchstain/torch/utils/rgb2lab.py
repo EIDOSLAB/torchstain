@@ -9,17 +9,21 @@ _white = torch.tensor([0.95047, 1., 1.08883])
 
 def rgb2lab(rgb):
     arr = rgb.type(torch.float32)
-
+    # Move constant tensors to the same device as input
+    device = arr.device
+    _rgb2xyz_device = _rgb2xyz.to(device)
+    _white_device = _white.to(device)
+  
     # convert rgb -> xyz color domain
     mask = arr > 0.04045
     not_mask = torch.logical_not(mask)
     arr.masked_scatter_(mask, torch.pow((torch.masked_select(arr, mask) + 0.055) / 1.055, 2.4))
     arr.masked_scatter_(not_mask, torch.masked_select(arr, not_mask) / 12.92)
 
-    xyz = torch.tensordot(torch.t(_rgb2xyz), arr, dims=([0], [0]))
+    xyz = torch.tensordot(torch.t(_rgb2xyz_device), arr, dims=([0], [0]))
 
     # scale by CIE XYZ tristimulus values of the reference white point
-    arr = torch.mul(xyz, 1 / _white.type(xyz.dtype).unsqueeze(dim=-1).unsqueeze(dim=-1))
+    arr = torch.mul(xyz, 1 / _white_device.type(xyz.dtype).unsqueeze(dim=-1).unsqueeze(dim=-1))
 
     # nonlinear distortion and linear transformation
     mask = arr > 0.008856

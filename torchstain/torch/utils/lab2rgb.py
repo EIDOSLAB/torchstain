@@ -6,6 +6,11 @@ _xyz2rgb = torch.linalg.inv(_rgb2xyz)
 def lab2rgb(lab):
     lab = lab.type(torch.float32)
     
+    # Move constant tensors to the same device as input
+    device = lab.device
+    _white_device = _white.to(device)
+    _xyz2rgb_device = _xyz2rgb.to(device)
+    
     # rescale back from OpenCV format and extract LAB channel
     L, a, b = lab[0] / 2.55, lab[1] - 128, lab[2] - 128
 
@@ -24,10 +29,10 @@ def lab2rgb(lab):
     out.masked_scatter_(not_mask, (torch.masked_select(out, not_mask) - 16 / 116) / 7.787)
 
     # rescale to the reference white (illuminant)
-    out = torch.mul(out, _white.type(out.dtype).unsqueeze(dim=-1).unsqueeze(dim=-1))
+    out = torch.mul(out, _white_device.type(out.dtype).unsqueeze(dim=-1).unsqueeze(dim=-1))
 
     # convert XYZ -> RGB color domain
-    arr = torch.tensordot(out, torch.t(_xyz2rgb).type(out.dtype), dims=([0], [0]))
+    arr = torch.tensordot(out, torch.t(_xyz2rgb_device).type(out.dtype), dims=([0], [0]))
     mask = arr > 0.0031308
     not_mask = torch.logical_not(mask)
     arr.masked_scatter_(mask, 1.055 * torch.pow(torch.masked_select(arr, mask), 1 / 2.4) - 0.055)
