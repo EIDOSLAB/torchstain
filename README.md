@@ -56,7 +56,7 @@ norm, H, E = normalizer.normalize(I=t_to_transform, stains=True)
 | Macenko | &check; | &check; | &check; |
 | Reinhard | &check; | &check; | &check; |
 | Modified Reinhard | &check; | &check; | &check; |
-| Multi-target Macenko | &cross; | &check; | &cross; |
+| Multi-target Macenko | &check; | &check; | &check; |
 | Macenko-Aug | &check; | &check; | &check; |
 
 ## Backend comparison
