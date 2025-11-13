@@ -1,5 +1,5 @@
 import torch
-from torchstain.torch.utils import cov, percentile
+from torchstain.torch.utils import percentile
 
 """
 Implementation of the multi-target normalizer from the paper: https://arxiv.org/pdf/2406.02077
@@ -50,7 +50,7 @@ class TorchMultiMacenkoNormalizer:
         OD, ODhat = self.__convert_rgb2od(I, Io=Io, beta=beta)
 
         # _, eigvecs = torch.symeig(cov(ODhat.T), eigenvectors=True)
-        _, eigvecs = torch.linalg.eigh(cov(ODhat.T), UPLO='U')
+        _, eigvecs = torch.linalg.eigh(torch.cov(ODhat.T), UPLO='U')
         eigvecs = eigvecs[:, [1, 2]]
 
         HE = self.__find_HE(ODhat, eigvecs, alpha)
@@ -77,7 +77,7 @@ class TorchMultiMacenkoNormalizer:
             OD = torch.cat(ODs, dim=0)
             ODhat = torch.cat(ODhats, dim=0)
 
-            eigvecs =  torch.symeig(cov(ODhat.T), eigenvectors=True)[1][:, [1, 2]]
+            eigvecs =  torch.symeig(torch.cov(ODhat.T), eigenvectors=True)[1][:, [1, 2]]
 
             HE =  self.__find_HE(ODhat, eigvecs, alpha)
 
@@ -91,7 +91,7 @@ class TorchMultiMacenkoNormalizer:
                 for I in Is
             ))
             
-            eigvecs = torch.stack([torch.symeig(cov(ODhat.T), eigenvectors=True)[1][:, [1, 2]] for ODhat in ODhats]).mean(dim=0)
+            eigvecs = torch.stack([torch.symeig(torch.cov(ODhat.T), eigenvectors=True)[1][:, [1, 2]] for ODhat in ODhats]).mean(dim=0)
 
             OD = torch.cat(ODs, dim=0)
             ODhat = torch.cat(ODhats, dim=0)
